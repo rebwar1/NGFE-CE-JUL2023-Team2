@@ -11,7 +11,7 @@ const items = [
       <a
         target="_blank"
         rel="noopener noreferrer"
-        href="https://www.antgroup.com"
+        href="https://team2-ce.netlify.app/"
       >
         log in
       </a>
@@ -23,7 +23,7 @@ const items = [
       <a
         target="_blank"
         rel="noopener noreferrer"
-        href="https://www.aliyun.com"
+        href="https://team2-ce.netlify.app/"
       >
         sign up
       </a>
@@ -115,7 +115,7 @@ export default function Header() {
               }}
               placement="bottomRight"
             >
-              <Button>Search for users</Button>
+              <Button>Health and Safety</Button>
             </Dropdown>
           </Space>
           <Space wrap></Space>
