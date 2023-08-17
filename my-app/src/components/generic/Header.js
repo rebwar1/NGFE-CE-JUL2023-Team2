@@ -11,7 +11,7 @@ const items = [
       <a
         target="_blank"
         rel="noopener noreferrer"
-        href="https://team2-ce.netlify.app/"
+        href="https://ant.design/components/overview/"
       >
         log in
       </a>
@@ -23,7 +23,7 @@ const items = [
       <a
         target="_blank"
         rel="noopener noreferrer"
-        href="https://team2-ce.netlify.app/"
+        href="https://ant.design/components/overview/"
       >
         sign up
       </a>
