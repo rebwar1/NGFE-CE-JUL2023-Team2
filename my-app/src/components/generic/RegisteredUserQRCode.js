@@ -1,20 +1,7 @@
-// import React from "react";
-// import QRCode from "qrcode.react";
-
-// function RegisteredUserQRCode({ user }) {
-//   const qrData = JSON.stringify(user);
-
-//   return (
-//     <div>
-//       <QRCode value={qrData} />
-//     </div>
-//   );
-// }
-
-// export default RegisteredUserQRCode;
 import React from "react";
 import { Form, Input, Button } from "antd";
 import QRCode from "qrcode.react";
+import CameraSelfie from "./CameraSelfie";
 
 function RegisteredUserQRCode() {
   const [userData, setUserData] = React.useState({});
@@ -46,6 +33,7 @@ function RegisteredUserQRCode() {
           <QRCode value={qrData} />
         </div>
       )}
+      <CameraSelfie />
     </div>
   );
 }
