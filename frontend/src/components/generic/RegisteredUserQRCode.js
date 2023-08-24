@@ -1,15 +1,9 @@
 // import React, { useState, useRef } from "react";
-// import { Form, Input, Button as button } from "antd";
+// import { Form, Input, Button, message } from "antd";
 // import QRCode from "qrcode.react";
 // import Webcam from "react-webcam";
-// import {
-//   Box,
-//   Button,
-//   CircularProgress,
-//   Image,
-//   SimpleGrid,
-//   Text,
-// } from "@chakra-ui/react";
+// import { Row, Col, Space, Spin } from "antd";
+// import { Image, SimpleGrid, Text } from "@chakra-ui/react";
 // import useMutation from "../../hooks/useMutation";
 // import useQuery from "../../hooks/useQuery";
 
@@ -31,57 +25,71 @@
 //     setQRData(JSON.stringify(values));
 //   };
 
-//   const [refetch, setRefetch] = useState(0);
-//   const webcamRef = useRef(null);
-//   const [imageUrls, setImageUrls] = useState([]);
+// const [refetch, setRefetch] = useState(0);
+// const webcamRef = useRef(null);
+// const [imageUrls, setImageUrls] = useState([]);
 
-//   const {
-//     mutate: uploadImage,
-//     isLoading: uploading,
-//     error: uploadError,
-//   } = useMutation({ url: URL });
+// const {
+//   mutate: uploadImage,
+//   isLoading: uploading,
+//   error: uploadError,
+// } = useMutation({ url: URL });
 
-//   const {
-//     data: fetchedImageUrls = [],
-//     isLoading: imagesLoading,
-//     error: fetchError,
-//   } = useQuery(URL, refetch);
+// const {
+//   data: fetchedImageUrls = [],
+//   isLoading: imagesLoading,
+//   error: fetchError,
+// } = useQuery(URL, refetch);
 
-//   const [error, setError] = useState("");
+// const [error, setError] = useState("");
 
-//   const handleUpload = async () => {
-//     const imageData = webcamRef.current.getScreenshot();
-//     const blob = await fetch(imageData).then(r => r.blob());
-//     const fileType = blob.type;
+// const handleUpload = async () => {
+//   const imageData = webcamRef.current.getScreenshot();
+//   const blob = await fetch(imageData).then(r => r.blob());
+//   const fileType = blob.type;
 
-//     if (!validFileTypes.includes(fileType)) {
-//       setError("Invalid image format. Please use jpg, jpeg, or png.");
-//       return;
-//     }
+//   if (!validFileTypes.includes(fileType)) {
+//     setError("Invalid image format. Please use jpg, jpeg, or png.");
+//     return;
+//   }
 
-//     const form = new FormData();
-//     form.append("image", blob, "selfie." + fileType.split("/")[1]);
+//   const form = new FormData();
+//   form.append("image", blob, "selfie." + fileType.split("/")[1]);
 
-//     await uploadImage(form);
+//   await uploadImage(form);
 
-//     setImageUrls(prevUrls => [imageData, ...prevUrls]);
-//     setError(""); // Clear any previous error
-//   };
+//   setImageUrls(prevUrls => [imageData, ...prevUrls]);
+//   setError(""); // Clear any previous error
+// };
 
-//   return (
-//     <Box mt={6}>
+// return (
+//   <Row gutter={16} align="middle">
+//     <Col xs={24} md={12}>
 //       <Form onFinish={handleFormSubmit}>
-//         <Form.Item label="Name" name="name">
+//         <Form.Item label="Name" name="name" required>
 //           <Input />
 //         </Form.Item>
-//         <Form.Item label="Email" name="email">
+//         <Form.Item label="Family Name" name="familyName" required>
+//           <Input />
+//         </Form.Item>
+//         <Form.Item label="Email" name="email" required>
+//           <Input />
+//         </Form.Item>
+//         <Form.Item
+//           label="Vehicle Registration Number"
+//           name="vehicleNumber"
+//           required
+//         >
+//           <Input />
+//         </Form.Item>
+//         <Form.Item label="Company Name" name="companyName" required>
 //           <Input />
 //         </Form.Item>
 //         {/* Add other input fields for user details */}
 //         <Form.Item>
-//           <button type="primary" htmlType="submit">
+//           <Button type="primary" htmlType="submit" block>
 //             Generate QR Code
-//           </button>
+//           </Button>
 //         </Form.Item>
 //       </Form>
 //       {qrData && (
@@ -89,43 +97,36 @@
 //           <QRCode value={qrData} />
 //         </div>
 //       )}
-
+//     </Col>
+//     <Col xs={24} md={12}>
 //       <Webcam audio={false} ref={webcamRef} screenshotFormat="image/jpeg" />
-
 //       <Button
 //         onClick={handleUpload}
-//         colorScheme="blue"
-//         variant="outline"
-//         mb={4}
-//         cursor="pointer"
-//         isLoading={uploading}
+//         type="primary"
+//         block
+//         style={{ marginTop: 16 }}
+//         loading={uploading}
 //       >
 //         Upload Selfie
 //       </Button>
 //       {error && <ErrorText>{error}</ErrorText>}
 //       {uploadError && <ErrorText>{uploadError}</ErrorText>}
-
-//       <Text textAlign="left" mb={4}>
+//     </Col>
+//     <Col xs={24}>
+//       <Text textAlign="center" mt={4} fontSize="xl">
 //         Posts
 //       </Text>
 //       {imagesLoading && (
-//         <CircularProgress
-//           color="gray.600"
-//           trackColor="blue.300"
-//           size={7}
-//           thickness={10}
-//           isIndeterminate
-//         />
+//         <Spin size="large" style={{ textAlign: "center", marginTop: 16 }} />
 //       )}
 //       {fetchError && (
-//         <ErrorText textAlign="left">Failed to load images</ErrorText>
+//         <ErrorText textAlign="center">Failed to load images</ErrorText>
 //       )}
 //       {!fetchError && imageUrls?.length === 0 && (
-//         <Text textAlign="left" fontSize="lg" color="gray.500">
+//         <Text textAlign="center" fontSize="lg" color="gray.500">
 //           No images found
 //         </Text>
 //       )}
-
 //       <SimpleGrid columns={[1, 2, 3]} spacing={4}>
 //         {imageUrls?.length > 0 &&
 //           imageUrls.map((url, index) => (
@@ -146,18 +147,22 @@
 //             />
 //           ))}
 //       </SimpleGrid>
-//     </Box>
-//   );
+//     </Col>
+//   </Row>
+// );
 // };
 
 // export default Posts;
-// // //🍉🍉🍉🍉🍉🍉🍉🍉
+
+// // // //🍉🍉🍉🍉🍉🍉🍉🍉
+
 import React, { useState, useRef } from "react";
 import { Form, Input, Button, message } from "antd";
 import QRCode from "qrcode.react";
 import Webcam from "react-webcam";
 import { Row, Col, Space, Spin } from "antd";
 import { Image, SimpleGrid, Text } from "@chakra-ui/react";
+import { format } from "date-fns"; // Import the format function
 import useMutation from "../../hooks/useMutation";
 import useQuery from "../../hooks/useQuery";
 
@@ -175,10 +180,17 @@ const Posts = () => {
   const [qrData, setQRData] = React.useState("");
 
   const handleFormSubmit = values => {
-    setUserData(values);
-    setQRData(JSON.stringify(values));
-  };
+    const currentDate = new Date();
+    const formattedDate = format(currentDate, "yyyy-MM-dd HH:mm:ss");
 
+    const updatedValues = {
+      ...values,
+      timestamp: formattedDate,
+    };
+
+    setUserData(updatedValues);
+    setQRData(JSON.stringify(updatedValues));
+  };
   const [refetch, setRefetch] = useState(0);
   const webcamRef = useRef(null);
   const [imageUrls, setImageUrls] = useState([]);
@@ -249,6 +261,7 @@ const Posts = () => {
         {qrData && (
           <div>
             <QRCode value={qrData} />
+            <p>Timestamp: {userData.timestamp}</p>
           </div>
         )}
       </Col>
@@ -304,6 +317,8 @@ const Posts = () => {
       </Col>
     </Row>
   );
+
+  // Rest of the component code remains unchanged...
 };
 
 export default Posts;
