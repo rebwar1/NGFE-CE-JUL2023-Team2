@@ -1,5 +1,5 @@
 import React from "react";
-
+import { ChakraProvider, Box } from "@chakra-ui/react";
 import RegisteredUserQRCode from "./RegisteredUserQRCode";
 import "../../assets/scss/dashboard.scss";
 
@@ -11,8 +11,12 @@ export default function DashboardSignup() {
   };
   return (
     <div className="dashboard">
-      <h1>Dashboard Signup</h1>
-      <RegisteredUserQRCode user={user} />
+      <ChakraProvider>
+        <Box textAlign="center" fontSize="2xl" m="3rem auto" p={5} maxW={700}>
+          <h1>Dashboard Signup</h1>
+          <RegisteredUserQRCode user={user} />
+        </Box>
+      </ChakraProvider>
     </div>
   );
 }
