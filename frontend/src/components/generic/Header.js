@@ -8,11 +8,7 @@ const items = [
   {
     key: "1",
     label: (
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="https://ant.design/components/overview/"
-      >
+      <a target="_blank" rel="noopener noreferrer" href="#">
         log in
       </a>
     ),
@@ -20,11 +16,7 @@ const items = [
   {
     key: "2",
     label: (
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="https://ant.design/components/overview/"
-      >
+      <a target="_blank" rel="noopener noreferrer" href="#">
         sign up
       </a>
     ),
