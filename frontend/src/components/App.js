@@ -49,7 +49,8 @@ import React from "react";
 import { Layout } from "antd";
 import { Routes, Route } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react"; // Import ChakraProvider
-
+import "antd/dist/reset.css";
+import "../assets/css/general.css";
 import Hedear from "./generic/Header";
 import Footer from "./generic/Footer";
 import Sidebar from "./generic/Sidebar";
