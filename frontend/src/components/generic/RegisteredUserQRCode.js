@@ -166,6 +166,8 @@ import { format } from "date-fns"; // Import the format function
 import useMutation from "../../hooks/useMutation";
 import useQuery from "../../hooks/useQuery";
 
+import "../../assets/scss/header.scss";
+
 const validFileTypes = ["image/jpg", "image/jpeg", "image/png"];
 const URL = "/images";
 
@@ -231,6 +233,7 @@ const Posts = () => {
   return (
     <Row gutter={16} align="middle">
       <Col xs={24} md={12}>
+        <p className="normal-text margin-text">Driver check-in</p>
         <Form onFinish={handleFormSubmit}>
           <Form.Item label="Name" name="name" required>
             <Input />
@@ -265,7 +268,7 @@ const Posts = () => {
           </div>
         )}
       </Col>
-      <Col xs={24} md={12}>
+      <Col xs={24} md={12} className="webcam-container">
         <Webcam audio={false} ref={webcamRef} screenshotFormat="image/jpeg" />
         <Button
           onClick={handleUpload}

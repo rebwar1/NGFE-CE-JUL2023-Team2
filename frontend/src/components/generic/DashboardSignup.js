@@ -13,7 +13,6 @@ export default function DashboardSignup() {
     <div className="dashboard">
       <ChakraProvider>
         <Box textAlign="center" fontSize="2xl" m="3rem auto" p={5} maxW={700}>
-          <h1>Dashboard Signup</h1>
           <RegisteredUserQRCode user={user} />
         </Box>
       </ChakraProvider>
