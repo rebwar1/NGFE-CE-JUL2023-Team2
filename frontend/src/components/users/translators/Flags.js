@@ -1,23 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Col, Row, Input } from "antd";
-import "../../assets/css/general.css";
-import FileTextTranslation from "../generic/textTranslationPolly/FileTextTranslation";
+import "../../../assets/css/general.css";
+
 const { Search } = Input;
 
-const CountryGrid = () => {
+const Flags = () => {
   const [countries, setCountries] = useState([]);
   const [filteredCountries, setFilteredCountries] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedLanguage, setSelectedLanguage] = useState(null);
-  const [selectedFlagDescription, setSelectedFlagDescription] = useState(null);
-
-  // Create a mapping of language names to their language codes
-  const languageNameToCode = {
-    Spanish: "es",
-    French: "fr",
-    German: "de",
-    // Add more languages as needed
-  };
 
   useEffect(() => {
     fetch("https://restcountries.com/v3.1/all")
@@ -45,11 +35,6 @@ const CountryGrid = () => {
     setSearchQuery(query);
   };
 
-  const handleCountryCardClick = (language, flagDescription) => {
-    setSelectedLanguage(languageNameToCode[language]); // Convert language name to code
-    setSelectedFlagDescription(flagDescription);
-  };
-
   return (
     <div className="site-card-wrapper">
       <div style={{ marginBottom: "16px" }}>
@@ -65,15 +50,7 @@ const CountryGrid = () => {
         <Row gutter={16}>
           {filteredCountries.map(country => (
             <Col key={country.name.common} span={4}>
-              <Card
-                title={country.name.common}
-                onClick={() =>
-                  handleCountryCardClick(
-                    country.languages[Object.keys(country.languages)[0]],
-                    country.flags.alt // Pass the flag description as an argument
-                  )
-                }
-              >
+              <Card title={country.name.common}>
                 <img
                   src={country.flags.png}
                   alt={`Flag of ${country.name.common}`}
@@ -89,17 +66,8 @@ const CountryGrid = () => {
           ))}
         </Row>
       )}
-      {selectedFlagDescription && (
-        <div>
-          <h2>{selectedFlagDescription}</h2>
-          <FileTextTranslation
-            selectedLanguage={selectedLanguage}
-            selectedFlagDescription={selectedFlagDescription}
-          />
-        </div>
-      )}
     </div>
   );
 };
 
-export default CountryGrid;
+export default Flags;

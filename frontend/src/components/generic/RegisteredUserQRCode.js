@@ -320,8 +320,6 @@ const Posts = () => {
       </Col>
     </Row>
   );
-
-  // Rest of the component code remains unchanged...
 };
 
 export default Posts;

@@ -41,6 +41,11 @@ const items = [
       "list",
       <OrderedListOutlined />
     ),
+    getItem(
+      <Link to="/users/translators/translator">Translators</Link>,
+      "trans",
+      <OrderedListOutlined />
+    ),
   ]),
   getItem("Health and Safety", "healthSafety", <SearchOutlined />, [
     getItem(

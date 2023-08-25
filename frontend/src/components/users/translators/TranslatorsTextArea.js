@@ -1,25 +1,32 @@
-import React, { useState, useEffect } from "react";
-import { Select, Button, Spin } from "antd";
-import AWS from "./Credentials";
+import React, { useState } from "react";
+import { Input, Select, Button, Spin } from "antd";
+import AWS from "../../generic/textTranslationPolly/Credentials";
 
+// AWS.config.update({
+//   region: "your-region",
+//   credentials: new AWS.Credentials("your-access-key", "your-secret-key"),
+// });
+
+const { TextArea } = Input;
 const { Option } = Select;
 
-const FileTextTranslation = ({ selectedLanguage, selectedFlagDescription }) => {
-  const [targetLanguage, setTargetLanguage] = useState(selectedLanguage);
+const TranslatorsTextArea = () => {
+  const [sourceText, setSourceText] = useState("");
+  const [targetLanguage, setTargetLanguage] = useState("es");
   const [translatedText, setTranslatedText] = useState("");
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    setTargetLanguage(selectedLanguage);
-  }, [selectedLanguage]);
-
   const translateText = async () => {
+    if (!sourceText) {
+      return;
+    }
+
     setLoading(true);
 
     const translate = new AWS.Translate();
 
     const params = {
-      Text: selectedFlagDescription,
+      Text: sourceText,
       SourceLanguageCode: "auto",
       TargetLanguageCode: targetLanguage,
     };
@@ -29,38 +36,6 @@ const FileTextTranslation = ({ selectedLanguage, selectedFlagDescription }) => {
       setTranslatedText(response.TranslatedText);
     } catch (error) {
       console.error("Error translating text:", error);
-    }
-
-    setLoading(false);
-  };
-
-  const synthesizeSpeech = async () => {
-    if (!translatedText && !selectedFlagDescription) {
-      return;
-    }
-
-    setLoading(true);
-
-    const polly = new AWS.Polly();
-
-    const textToSynthesize = translatedText || selectedFlagDescription;
-
-    const params = {
-      Text: textToSynthesize,
-      OutputFormat: "mp3",
-      VoiceId: getVoiceId(targetLanguage),
-    };
-
-    try {
-      const response = await polly.synthesizeSpeech(params).promise();
-
-      const audioSrc = URL.createObjectURL(
-        new Blob([response.AudioStream], { type: "audio/mpeg" })
-      );
-      const audio = new Audio(audioSrc);
-      audio.play();
-    } catch (error) {
-      console.error("Error synthesizing speech:", error);
     }
 
     setLoading(false);
@@ -80,9 +55,45 @@ const FileTextTranslation = ({ selectedLanguage, selectedFlagDescription }) => {
     }
   };
 
+  const synthesizeSpeech = async () => {
+    if (!translatedText) {
+      return;
+    }
+
+    setLoading(true);
+
+    const polly = new AWS.Polly();
+
+    const params = {
+      Text: translatedText,
+      OutputFormat: "mp3",
+      VoiceId: getVoiceId(targetLanguage),
+    };
+
+    try {
+      const response = await polly.synthesizeSpeech(params).promise();
+
+      const audioSrc = URL.createObjectURL(
+        new Blob([response.AudioStream], { type: "audio/mpeg" })
+      );
+      const audio = new Audio(audioSrc);
+      audio.play();
+    } catch (error) {
+      console.error("Error synthesizing speech:", error);
+    }
+
+    setLoading(false);
+  };
+
   return (
     <div className="translate-container">
       <h1>Text Translation</h1>
+      <TextArea
+        rows={5}
+        placeholder="Enter text to translate"
+        value={sourceText}
+        onChange={e => setSourceText(e.target.value)}
+      />
       <div className="language-select">
         <label htmlFor="targetLanguage">Target Language:</label>
         <Select
@@ -112,4 +123,4 @@ const FileTextTranslation = ({ selectedLanguage, selectedFlagDescription }) => {
   );
 };
 
-export default FileTextTranslation;
+export default TranslatorsTextArea;
