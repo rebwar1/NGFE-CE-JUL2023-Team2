@@ -90,8 +90,8 @@ const CountryGrid = () => {
         </Row>
       )}
       {selectedFlagDescription && (
-        <div>
-          <h2>{selectedFlagDescription}</h2>
+        <div style={{ padding: "2rem" }}>
+          <h6 style={{ color: "black" }}>{selectedFlagDescription}</h6>
           <FileTextTranslation
             selectedLanguage={selectedLanguage}
             selectedFlagDescription={selectedFlagDescription}
