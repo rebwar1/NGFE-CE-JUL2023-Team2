@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express, { json } from "express";
 import cors from "cors";
+import path from "path";
 import multer, { memoryStorage } from "multer";
 import { getUserPresignedUrls, uploadToS3 } from "./s3.mjs";
 
@@ -19,6 +20,24 @@ app.use(
   })
 );
 app.use(json());
+
+//TODO Serve static files from the React app
+const _dirname = path.dirname("");
+const buildPath = path.join(_dirname, "../frontend/build");
+
+app.use(express.static(buildPath));
+
+app.get("/*", function (req, res) {
+  res.sendFile(
+    path.join(__dirname, "../frontend/build/index.html"),
+    function (err) {
+      if (err) {
+        res.status(500).send(err);
+      }
+    }
+  );
+});
+//TODO end of Serve static files from the React app
 
 app.post("/images", upload.single("image"), (req, res) => {
   const { file } = req;
