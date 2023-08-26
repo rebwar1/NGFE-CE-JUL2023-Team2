@@ -26,14 +26,15 @@ function App() {
             <Sidebar />
             <Content className="content">
               <Routes>
-                <Route path="/login" element={<DashboardLogin />} />
+                {/* <Route path="/login" element={<DashboardLogin />} /> */}
                 <Route path="/signup" element={<DashboardSignup />} />
-                <Route path="/users/reportAccident" element={<ContactForm />} />
+                <Route path="/login" element={<DashboardLogin />} />
                 <Route path="/users/notification" element={<Notification />} />
                 <Route
                   path="/users/translators/translator"
                   element={<Translators />}
                 />
+                <Route path="/users/reportAccident" element={<ContactForm />} />
                 <Route path="/healthSafety/boards" element={<Boards />} />
               </Routes>
             </Content>

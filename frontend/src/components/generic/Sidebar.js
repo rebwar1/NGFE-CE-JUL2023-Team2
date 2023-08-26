@@ -1,14 +1,14 @@
 import {
-  SettingOutlined,
-  UsergroupAddOutlined,
-  UserSwitchOutlined,
-  SearchOutlined,
-  DashboardOutlined,
+  DashboardFilled,
   TranslationOutlined,
   FlagOutlined,
   SafetyOutlined,
   AntDesignOutlined,
   AudioOutlined,
+  SafetyCertificateFilled,
+  WarningOutlined,
+  SettingFilled,
+  PlayCircleFilled,
 } from "@ant-design/icons";
 import { Menu, Layout } from "antd";
 // import Link from "antd/es/typography/Link";
@@ -28,16 +28,11 @@ function getItem(label, key, icon, children, type) {
 }
 
 const items = [
-  getItem("Dashboard", "dashboard", <DashboardOutlined />, [
+  getItem("Dashboard", "dashboard", <DashboardFilled />, [
     getItem(<Link to="/signup">sign up</Link>, "signup", <AntDesignOutlined />),
-    getItem(<Link to="/login">Language TTS</Link>, "login", <AudioOutlined />),
   ]),
-  getItem("Users management", "users", <UserSwitchOutlined />, [
-    getItem(
-      <Link to="/users/reportAccident">Report accident</Link>,
-      "post",
-      <UsergroupAddOutlined />
-    ),
+  getItem("Play TTS", "users", <PlayCircleFilled />, [
+    getItem(<Link to="/login">Language TTS</Link>, "login", <AudioOutlined />),
     getItem(
       <Link to="/users/notification">Flag TTS</Link>,
       "list",
@@ -49,14 +44,19 @@ const items = [
       <TranslationOutlined />
     ),
   ]),
-  getItem("Health and Safety", "healthSafety", <SearchOutlined />, [
+  getItem("Health and Safety", "healthSafety", <SafetyCertificateFilled />, [
+    getItem(
+      <Link to="/users/reportAccident">Report accident</Link>,
+      "post",
+      <WarningOutlined />
+    ),
     getItem(
       <Link to="/healthSafety/boards">Site Safety Boards & Banners</Link>,
       "search",
       <SafetyOutlined />
     ),
   ]),
-  getItem("Settings", "setting", <SettingOutlined />, [getItem("Option", "9")]),
+  getItem("Settings", "setting", <SettingFilled />, [getItem("Option", "9")]),
 ];
 
 const rootSubmenuKeys = ["dashboard", "users", "healthSafety", "setting"];
