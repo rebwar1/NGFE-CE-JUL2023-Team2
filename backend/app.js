@@ -23,8 +23,11 @@ app.use(
 app.use(json());
 
 //TODO Serve static files from the React app
-const _dirname = path.dirname("");
-const buildPath = path.join(_dirname, "../frontend/build");
+// const _dirname = path.dirname("");
+// const buildPath = path.join(_dirname, "../frontend/build");
+
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
+const buildPath = path.join(__dirname, "../frontend/build");
 
 app.use(express.static(buildPath));
 
