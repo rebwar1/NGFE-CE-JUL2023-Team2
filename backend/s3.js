@@ -28,7 +28,7 @@ export const uploadToS3 = async ({ file, userId }) => {
   }
 };
 
-const getImageKeysByUser = async (userId) => {
+const getImageKeysByUser = async userId => {
   const command = new ListObjectsV2Command({
     Bucket: BUCKET,
     Prefix: userId,
@@ -38,15 +38,15 @@ const getImageKeysByUser = async (userId) => {
 
   return Contents.sort(
     (a, b) => new Date(b.LastModified) - new Date(a.LastModified)
-  ).map((image) => image.Key);
+  ).map(image => image.Key);
 };
 
-export const getUserPresignedUrls = async (userId) => {
+export const getUserPresignedUrls = async userId => {
   try {
     const imageKeys = await getImageKeysByUser(userId);
 
     const presignedUrls = await Promise.all(
-      imageKeys.map((key) => {
+      imageKeys.map(key => {
         const command = new GetObjectCommand({ Bucket: BUCKET, Key: key });
         return getSignedUrl(s3, command, { expiresIn: 900 }); // default
       })
@@ -57,3 +57,5 @@ export const getUserPresignedUrls = async (userId) => {
     return { error };
   }
 };
+
+//🍉
