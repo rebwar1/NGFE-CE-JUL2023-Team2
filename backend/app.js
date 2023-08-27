@@ -2,7 +2,7 @@ import "dotenv/config";
 import express, { json } from "express";
 import cors from "cors";
 import path from "path";
-// import { fileURLToPath } from "url";
+import { fileURLToPath } from "url";
 import multer, { memoryStorage } from "multer";
 import { getUserPresignedUrls, uploadToS3 } from "./s3.js";
 
@@ -25,8 +25,21 @@ app.use(json());
 //TODO Serve static files from the React app
 // const _dirname = path.dirname("");
 // const buildPath = path.join(_dirname, "../frontend/build");
+// app.use(express.static(buildPath));
 
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
+// app.get("/*", function (req, res) {
+//   res.sendFile(
+//     path.join(__dirname, "../frontend/build/index.html"),
+//     function (err) {
+//       if (err) {
+//         res.status(500).send(err);
+//       }
+//     }
+//   );
+// });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const buildPath = path.join(__dirname, "../frontend/build");
 
 app.use(express.static(buildPath));
