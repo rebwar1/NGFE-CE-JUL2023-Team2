@@ -2,8 +2,6 @@ import "dotenv/config";
 import express, { json } from "express";
 import mysql from "mysql2";
 import cors from "cors";
-import path from "path";
-import { fileURLToPath } from "url";
 import multer, { memoryStorage } from "multer";
 import { getUserPresignedUrls, uploadToS3 } from "./s3.js";
 
@@ -11,12 +9,17 @@ const app = express();
 
 const db = mysql.createConnection({
   host: "localhost",
-  user: "root",
-  password: "azad4582",
+  user: "NGF", // Make sure this matches the username you created in MySQL
+  password: "123", // Make sure this matches the password you set for the user
   database: "DriverCheckInDB",
-  authPlugins: {
-    mysql_clear_password: () => () => Buffer.from("azad4582"),
-  },
+});
+
+db.connect(err => {
+  if (err) {
+    console.error("Error connecting to MySQL:", err);
+    return;
+  }
+  console.log("Connected to MySQL");
 });
 
 const PORT = process.env.PORT || 4000;
@@ -27,8 +30,6 @@ const upload = multer({ storage });
 app.use(
   cors({
     origin: "*",
-    // methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    // credentials: true,
   })
 );
 app.use(json());
@@ -36,45 +37,6 @@ app.use(json());
 app.get("/", (req, res) => {
   res.json("Hello World!");
 });
-app.get("/check-ins", (req, res) => {
-  const query = "SELECT * FROM CheckIns"; // Using the correct table name
-
-  db.query(query, (error, results) => {
-    if (error) {
-      console.error("Error querying the database:", error);
-      return res.status(500).json({ message: "Internal server error" });
-    }
-
-    console.log("Check-ins retrieved from the database:", results);
-    return res.status(200).json(results);
-  });
-});
-
-//TODO Serve static files from the React app
-/**
- * ! const _dirname = path.dirname("");
- *! const buildPath = path.join(_dirname, "../frontend/build");
- *! app.use(express.static(buildPath));
- */
-
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
-
-// const buildPath = path.join(__dirname, "../frontend/build");
-
-// app.use(express.static(buildPath));
-
-// app.get("/*", function (req, res) {
-//   res.sendFile(
-//     path.join(__dirname, "../frontend/build/index.html"),
-//     function (err) {
-//       if (err) {
-//         res.status(500).send(err);
-//       }
-//     }
-//   );
-// });
-//TODO end of Serve static files from the React app
 
 app.post("/images", upload.single("image"), (req, res) => {
   const { file } = req;
@@ -99,8 +61,59 @@ app.get("/images", async (req, res) => {
   return res.json(presignedUrls);
 });
 
+app.post("/save-check-in", (req, res) => {
+  const { name, familyName, email, vehicleNumber, companyName, timestamp } =
+    req.body;
+
+  // Insert the form data into the database
+  const query =
+    "INSERT INTO CheckIns (name, familyName, email, vehicleNumber, companyName, timestamp) VALUES (?, ?, ?, ?, ?, ?)";
+  const values = [
+    name,
+    familyName,
+    email,
+    vehicleNumber,
+    companyName,
+    timestamp,
+  ];
+
+  db.query(query, values, (error, result) => {
+    if (error) {
+      console.error("Error while saving check-in:", error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+
+    console.log("Check-in saved to the database");
+
+    // Send the saved data back to the frontend
+    return res.status(201).json({
+      message: "Check-in saved successfully",
+      savedData: {
+        name,
+        familyName,
+        email,
+        vehicleNumber,
+        companyName,
+        timestamp,
+      },
+    });
+  });
+});
+
+app.get("/save-check-in", (req, res) => {
+  const query = "SELECT * FROM CheckIns"; // Using the correct table name
+
+  db.query(query, (error, results) => {
+    if (error) {
+      console.error("Error querying the database:", error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+
+    console.log("Check-ins retrieved from the database:", results);
+    return res.status(200).json(results);
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
-
-//🍉
