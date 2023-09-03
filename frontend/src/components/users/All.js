@@ -11,9 +11,6 @@ import { PrinterOutlined } from "@ant-design/icons";
 import ReactToPrint from "react-to-print";
 
 import "../../App.css";
-import "../../assets/scss/dashboard.scss";
-import "antd/dist/reset.css";
-import "../../assets/css/general.css";
 
 const validFileTypes = ["image/jpg", "image/jpeg", "image/png"];
 const URL = "/images";
