@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react";
+// //🏆🏆🏆🏆🏆🏆
+import React, { useState, useRef, useEffect } from "react";
 import { Form, Input, Button, message } from "antd";
 import QRCode from "qrcode.react";
 import Webcam from "react-webcam";
@@ -7,8 +8,10 @@ import { Image, SimpleGrid, Text } from "@chakra-ui/react";
 import { format } from "date-fns"; // Import the format function
 import useMutation from "../../hooks/useMutation";
 import useQuery from "../../hooks/useQuery";
+import { Card } from "antd";
+const { Meta } = Card;
 
-import "../../assets/scss/header.scss";
+// import "../../assets/scss/header.scss";
 
 const validFileTypes = ["image/jpg", "image/jpeg", "image/png"];
 const URL = "/images";
@@ -22,6 +25,7 @@ const ErrorText = ({ children, ...props }) => (
 const Posts = () => {
   const [userData, setUserData] = useState({});
   const [qrData, setQRData] = useState("");
+  const [lastSubmittedImage, setLastSubmittedImage] = useState(null); // New state for last submitted image
 
   const handleFormSubmit = async values => {
     const currentDate = new Date();
@@ -35,6 +39,7 @@ const Posts = () => {
     setUserData(updatedValues);
     setQRData(JSON.stringify(updatedValues));
   };
+
   const [refetch, setRefetch] = useState(0);
   const webcamRef = useRef(null);
   const [imageUrls, setImageUrls] = useState([]);
@@ -69,8 +74,12 @@ const Posts = () => {
     await uploadImage(form);
 
     setImageUrls(prevUrls => [imageData, ...prevUrls]);
+    setLastSubmittedImage(imageData); // Set the last submitted image
     setError(""); // Clear any previous error
   };
+
+  const [lastSubmittedData, setLastSubmittedData] = useState(null);
+
   const handleQRFormSubmit = async () => {
     // Create a data object to send to the backend
     const formData = {
@@ -90,6 +99,7 @@ const Posts = () => {
 
       if (response.ok) {
         message.success("Check-in saved successfully!");
+        setLastSubmittedData(formData); // Store the last submitted data
       } else {
         message.error("Error: Unable to save check-in.");
       }
@@ -173,25 +183,45 @@ const Posts = () => {
             No images found
           </Text>
         )}
+
         <SimpleGrid columns={[1, 2, 3]} spacing={4}>
-          {imageUrls?.length > 0 &&
-            imageUrls.map((url, index) => (
-              <Image
-                key={index}
-                borderRadius={5}
-                src={url}
-                alt={`Selfie ${index + 1}`}
-              />
-            ))}
-          {fetchedImageUrls?.length > 0 &&
-            fetchedImageUrls.map((url, index) => (
-              <Image
-                key={index}
-                borderRadius={5}
-                src={url}
-                alt={`Image ${index + 1}`}
-              />
-            ))}
+          {lastSubmittedData && (
+            <div>
+              <Card
+                hoverable
+                style={{ width: 240 }}
+                cover={
+                  lastSubmittedImage && (
+                    <Image src={lastSubmittedImage} alt="Last Submitted" />
+                  )
+                }
+              >
+                <Meta
+                  title={`${lastSubmittedData.name} ${lastSubmittedData.familyName}`}
+                  description={lastSubmittedData.timestamp}
+                />
+                <p>
+                  <strong>Name:</strong> {lastSubmittedData.name}
+                </p>
+                <p>
+                  <strong>Family Name:</strong> {lastSubmittedData.familyName}
+                </p>
+                <p>
+                  <strong>Email:</strong> {lastSubmittedData.email}
+                </p>
+                <p>
+                  <strong>Vehicle Number:</strong>{" "}
+                  {lastSubmittedData.vehicleNumber || "N/A"}
+                </p>
+                <p>
+                  <strong>Company Name:</strong> {lastSubmittedData.companyName}
+                </p>
+                <p>
+                  <strong>Timestamp:</strong> {lastSubmittedData.timestamp}
+                </p>
+              </Card>
+            </div>
+          )}
         </SimpleGrid>
       </Col>
     </Row>
