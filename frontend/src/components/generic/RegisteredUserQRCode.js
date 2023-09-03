@@ -441,8 +441,9 @@ import useMutation from "../../hooks/useMutation";
 import useQuery from "../../hooks/useQuery";
 import { Card } from "antd";
 import { PrinterOutlined } from "@ant-design/icons";
-import ReactToPrint from "react-to-print"; // Import ReactToPrint library
-import GridWithPrint from "./GridWithPrint";
+import ReactToPrint from "react-to-print";
+
+import "../../App.css";
 
 const { Meta } = Card;
 
@@ -460,6 +461,7 @@ const Posts = () => {
   const [qrData, setQRData] = useState("");
   const [lastSubmittedImage, setLastSubmittedImage] = useState(null);
   const [printView, setPrintView] = useState(false);
+  const [showCard, setShowCard] = useState(false); // Add showCard state variable
 
   const handleFormSubmit = async values => {
     const currentDate = new Date();
@@ -508,11 +510,16 @@ const Posts = () => {
     const form = new FormData();
     form.append("image", blob, "selfie." + fileType.split("/")[1]);
 
-    await uploadImage(form);
-
-    setImageUrls(prevUrls => [imageData, ...prevUrls]);
-    setLastSubmittedImage(imageData);
-    setError("");
+    try {
+      // Upload the image and set showCard to true when the upload is successful
+      await uploadImage(form);
+      setShowCard(true); // Show the card
+      setImageUrls(prevUrls => [imageData, ...prevUrls]);
+      setLastSubmittedImage(imageData);
+      setError("");
+    } catch (error) {
+      setError("Error uploading image. Please try again.");
+    }
   };
 
   const [lastSubmittedData, setLastSubmittedData] = useState(null);
@@ -533,9 +540,11 @@ const Posts = () => {
       });
 
       if (response.ok) {
+        console.log("Check-in saved successfully!");
         message.success("Check-in saved successfully!");
         setLastSubmittedData(formData);
       } else {
+        console.error("Error: Unable to save check-in.");
         message.error("Error: Unable to save check-in.");
       }
     } catch (error) {
@@ -544,7 +553,7 @@ const Posts = () => {
     }
   };
 
-  const cardRef = useRef(null); // Create a ref for the Card component
+  const cardRef = useRef(null);
 
   return (
     <Row gutter={16} align="middle">
@@ -570,10 +579,14 @@ const Posts = () => {
           <Form.Item label="Company Name" name="companyName" required>
             <Input />
           </Form.Item>
-          {/* Add as many form fields as needed */}
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" block>
+            <Button
+              type="primary"
+              htmlType="submit"
+              block
+              onClick={handleQRFormSubmit}
+            >
               Generate QR Code
             </Button>
           </Form.Item>
@@ -583,56 +596,80 @@ const Posts = () => {
           <div>
             <QRCode value={qrData} />
             <p>Timestamp: {userData.timestamp}</p>
-            <Button
-              type="primary"
-              htmlType="submit"
-              block
-              onClick={handleQRFormSubmit}
-            >
-              Save Check-In
-            </Button>
           </div>
         )}
       </Col>
-      <Col xs={24} md={12} className="webcam-container">
-        <Webcam audio={false} ref={webcamRef} screenshotFormat="image/jpeg" />
-        <Button
-          onClick={handleUpload}
-          type="primary"
-          block
-          style={{ marginTop: 16 }}
-          loading={uploading}
-        >
-          Upload Selfie
-        </Button>
-        {error && <ErrorText>{error}</ErrorText>}
-        {uploadError && <ErrorText>{uploadError}</ErrorText>}
-      </Col>
-      <Col xs={24}>
-        <Text textAlign="center" mt={4} fontSize="xl">
-          Posts
-        </Text>
-        {imagesLoading && (
-          <Spin size="large" style={{ textAlign: "center", marginTop: 16 }} />
-        )}
-        {fetchError && (
-          <ErrorText textAlign="center">Failed to load images</ErrorText>
-        )}
-        {!fetchError && imageUrls?.length === 0 && (
-          <Text textAlign="center" fontSize="lg" color="gray.500">
-            No images found
-          </Text>
-        )}
-
-        {/* Use the GridWithPrint component for rendering the SimpleGrid */}
-        <GridWithPrint
-          lastSubmittedData={lastSubmittedData}
-          lastSubmittedImage={lastSubmittedImage}
-          printView={printView}
-          togglePrintView={() => setPrintView(!printView)}
-          cardRef={cardRef} // Pass the cardRef to GridWithPrint
+      <Col xs={24} md={12}>
+        <p className="normal-text margin-text">Take a selfie</p>
+        <Webcam
+          audio={false}
+          ref={webcamRef}
+          screenshotFormat="image/jpeg"
+          className="webcam"
         />
+        {error && <ErrorText>{error}</ErrorText>}
+        <Space>
+          <Button
+            type="primary"
+            className="capture"
+            onClick={handleUpload}
+            disabled={uploading} // Disable the button when uploading
+          >
+            Capture and Upload
+          </Button>
+          {uploading && <Spin />}
+        </Space>
       </Col>
+      <Col xs={24} md={24}>
+        {imagesLoading && <Spin />}
+        {fetchError && <ErrorText>{fetchError.message}</ErrorText>}
+      </Col>
+      <Col xs={24} md={24}>
+        {showCard && userData && (
+          <>
+            <Card
+              title="Driver Information"
+              ref={cardRef}
+              style={{ width: 300 }}
+              cover={
+                <Image
+                  src={lastSubmittedImage || "/images/default-selfie.jpg"}
+                  alt="Driver"
+                />
+              }
+            >
+              <div>
+                <strong>Name:</strong> {userData.name || ""}
+              </div>
+              <div>
+                <strong>Family Name:</strong> {userData.familyName || ""}
+              </div>
+              <div>
+                <strong>Email:</strong> {userData.email || ""}
+              </div>
+              <div>
+                <strong>Vehicle Number:</strong>{" "}
+                {userData.vehicleNumber || "N/A"}
+              </div>
+              <div>
+                <strong>Company Name:</strong> {userData.companyName || "N/A"}
+              </div>
+              <div>
+                <strong>Timestamp:</strong> {userData.timestamp || ""}
+              </div>
+            </Card>
+            <ReactToPrint
+              trigger={() => (
+                <Button type="primary" icon={<PrinterOutlined />} block>
+                  Print
+                </Button>
+              )}
+              content={() => cardRef.current}
+            />
+          </>
+        )}
+      </Col>
+      <Col xs={24}></Col>
     </Row>
   );
 };

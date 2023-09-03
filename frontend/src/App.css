@@ -36,3 +36,11 @@
     transform: rotate(360deg);
   }
 }
+
+.webcam {
+  height: fit-content;
+}
+
+.capture {
+  margin-top: 1.5rem;
+}
