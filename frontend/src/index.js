@@ -1,15 +1,13 @@
 import React, { Suspense } from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom"; // Import createRoot from react-dom
 import { BrowserRouter as Router } from "react-router-dom";
-import { ChakraProvider, CSSReset } from "@chakra-ui/react"; // Import necessary Chakra components
+import { ChakraProvider, CSSReset } from "@chakra-ui/react";
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
 import HttpApi from "i18next-http-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
 import "bootstrap/dist/js/bootstrap.js";
-
 import App from "./components/App";
-
 import "bootstrap/dist/css/bootstrap.min.css";
 import "flag-icon-css/css/flag-icon.min.css";
 
@@ -21,12 +19,10 @@ i18next
     supportedLngs: ["en", "ar", "fr"],
     fallbackLng: "en",
     debug: false,
-    // Options for language detector
     detection: {
       order: ["path", "cookie", "htmlTag"],
       caches: ["cookie"],
     },
-    // react: { useSuspense: false },
     backend: {
       loadPath: "/assets/locales/{{lng}}/translation.json",
     },
@@ -38,7 +34,9 @@ const loadingMarkup = (
   </div>
 );
 
-ReactDOM.render(
+const root = createRoot(document.getElementById("root")); // Use createRoot
+
+root.render(
   <Suspense fallback={loadingMarkup}>
     <ChakraProvider>
       <CSSReset />
@@ -46,7 +44,5 @@ ReactDOM.render(
         <App />
       </Router>
     </ChakraProvider>
-    ,
-  </Suspense>,
-  document.getElementById("root")
+  </Suspense>
 );

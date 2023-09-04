@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { Form, Input, Button, message } from "antd";
+import axiosClientWithoutHeader from "../../config/axios";
 import QRCode from "qrcode.react";
 import Webcam from "react-webcam";
 import { Row, Col, Space, Spin } from "antd";
@@ -43,25 +44,40 @@ const Posts = () => {
     setQRData(JSON.stringify(updatedValues));
 
     try {
-      const response = await fetch("http://localhost:4000/save-check-in", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await axiosClientWithoutHeader.post(
+        "/save-check-in",
+        {
+          ...updatedValues,
         },
-        body: JSON.stringify(updatedValues),
-      });
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      if (response.ok) {
+      if (
+        response.status === 201 &&
+        response.data.message === "Check-in saved successfully"
+      ) {
         console.log("Check-in saved successfully!");
         message.success("Check-in saved successfully!");
 
-        // Handle QR code generation here or call a separate function
+        // You can access the saved data from the server response
+        const savedData = response.data.savedData;
+
+        // Handle the saved data as needed
+        console.log("Saved Data:", savedData);
       } else {
         console.error("Error: Unable to save check-in.");
         message.error("Error: Unable to save check-in. Please try again.");
       }
     } catch (error) {
       console.error("Error:", error);
+      if (error.response) {
+        console.error("Response Data:", error.response.data);
+        console.error("Response Status:", error.response.status);
+      }
       message.error("Error: Unable to save check-in. Please try again later.");
     }
   };
