@@ -1,33 +1,44 @@
-// src/components/CountryCardList.js
-
-import React, { useEffect, useState } from "react";
-import { Row, Col } from "antd";
-// import axios from "axios";
-import { axiosClientWithoutHeader } from "../../../../config/axios";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Button, Row } from "antd";
 import CountryCard from "./CountryCard";
+import "./flags.css";
 
-const CountryCardList = () => {
-  const [data, setData] = useState([]);
+function CountryCardList() {
+  const [countries, setCountries] = useState([]);
+  const [showCountries, setShowCountries] = useState(false);
 
   useEffect(() => {
-    axiosClientWithoutHeader.get("/api/flag").then(response => {
-      setData(response.data);
-    });
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:4000/api/flag");
+        setCountries(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (
-    <Row gutter={16}>
-      {data.map(country => (
-        <Col span={5} key={country.name_common}>
-          <CountryCard
-            name={country.name_common}
-            flagUrl={country.flag_url}
-            language={country.language}
-          />
-        </Col>
-      ))}
-    </Row>
+    <div className="flag">
+      <Button onClick={() => setShowCountries(true)}>
+        Select Your Language
+      </Button>
+      {showCountries && (
+        <Row gutter={16}>
+          <div className="horizontal-card-container">
+            {countries.map((country, index) => (
+              <CountryCard key={index} country={country} />
+            ))}
+          </div>
+        </Row>
+      )}
+    </div>
   );
-};
+}
 
 export default CountryCardList;
+
+//🍟

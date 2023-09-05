@@ -82,7 +82,7 @@ const FileTextTranslation = ({ selectedLanguage, selectedFlagDescription }) => {
 
   return (
     <div className="translate-container">
-      <h1>Text Translation</h1>
+      <h1>Text Translation REBWAR</h1>
       <div className="language-select">
         <label htmlFor="targetLanguage">Target Language:</label>
         <Select

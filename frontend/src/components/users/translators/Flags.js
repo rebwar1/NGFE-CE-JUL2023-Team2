@@ -70,4 +70,4 @@ const Flags = () => {
   );
 };
 
-export default Flags;
+// export default Flags;

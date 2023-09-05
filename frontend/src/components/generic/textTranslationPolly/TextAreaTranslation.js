@@ -87,7 +87,7 @@ const TextAreaTranslation = () => {
 
   return (
     <div className="translate-container">
-      <h1>Text Translation</h1>
+      <h1>Text Translation </h1>
       <TextArea
         rows={5}
         placeholder="Enter text to translate"

@@ -1,0 +1,19 @@
+/* flags.css */
+
+.flag {
+  text-align: center; /* Center the button */
+}
+
+.horizontal-card-container {
+  display: flex;
+  flex-wrap: nowrap; /* Prevent wrapping to the next line */
+  overflow-x: auto; /* Enable horizontal scrolling if needed */
+  margin: 0 -8px; /* Add margin to the container */
+}
+
+.horizontal-card-container > .ant-col {
+  flex: 0 0 calc(20% - 16px); /* Adjust width to 20% (5 cards in a row) */
+  margin: 8px;
+}
+
+/* Add additional styles for cards if needed */
