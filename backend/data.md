@@ -69,3 +69,23 @@ timestamp TIMESTAMP
 -- Insert the provided values into the table with a proper timestamp
 INSERT INTO CheckIns (name, familyName, email, vehicleNumber, companyName, timestamp)
 VALUES ('Team2', 'Ngfe', 'team2@gmail.com', 'M54J7689', 'traveling co', '2023-09-02 00:00:00');
+
+<!-- ? -->
+<!-- ! environment.html -->
+
+https://www.123rf.com/stock-photo/health_safety_environment.html
+
+<!-- ! image 1 -->
+<!-- ? Standard construction safety equipment on wood background -->
+
+https://previews.123rf.com/images/chatchai8989/chatchai89891707/chatchai8989170700039/81440712-standard-construction-safety-equipment-on-wood-background.jpg
+
+<!-- ! image 2 -->
+<!-- ? please Stop smoking concept No smoking sign in the coffee shop go free smoking area -->
+
+https://previews.123rf.com/images/adiruch/adiruch1810/adiruch181000007/108967555-please-stop-smoking-concept-no-smoking-sign-in-the-coffee-shop-go-free-smoking-area.jpg
+
+<!-- ! image 3 -->
+<!-- ? Yellow warning caution sign slippery floor is tile -->
+
+https://previews.123rf.com/images/nastenkapeka/nastenkapeka1610/nastenkapeka161000036/65153418-yellow-warning-caution-sign-slippery-floor-is-tile.jpg

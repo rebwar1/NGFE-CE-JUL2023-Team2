@@ -1,17 +1,17 @@
+import { axiosClientWithoutHeader } from "../../../config/axios";
 import React, { useState, useRef } from "react";
-import { Form, Input, Button, message } from "antd";
-import { axiosClientWithoutHeader } from "../../config/axios";
+import { Form, Input, Button, message, Row, Col, Space, Spin } from "antd";
 import QRCode from "qrcode.react";
 import Webcam from "react-webcam";
-import { Row, Col, Space, Spin } from "antd";
 import { Image, Text } from "@chakra-ui/react";
-import useMutation from "../../hooks/useMutation";
-import useQuery from "../../hooks/useQuery";
+import useMutation from "../../../hooks/useMutation";
+import useQuery from "../../../hooks/useQuery";
 import { Card } from "antd";
 import { PrinterOutlined } from "@ant-design/icons";
 import ReactToPrint from "react-to-print";
 
-import "../../App.css";
+import "../../../App.css";
+import AgreementSignature from "./AgreementSignature"; // Import the new component
 
 const validFileTypes = ["image/jpg", "image/jpeg", "image/png"];
 const URL = "/images";
@@ -29,6 +29,8 @@ const Posts = () => {
   const [showForm, setShowForm] = useState(true);
   const [showSelfieCapture, setShowSelfieCapture] = useState(false);
   const [showCard, setShowCard] = useState(false);
+  const [showSignature, setShowSignature] = useState(false);
+  const [useTypedName, setUseTypedName] = useState(false); // Track whether to use typed name or signature
 
   const handleFormSubmit = async values => {
     const currentDate = new Date();
@@ -64,12 +66,6 @@ const Posts = () => {
       ) {
         console.log("Check-in saved successfully!");
         message.success("Check-in saved successfully!");
-
-        // You can access the saved data from the server response
-        const savedData = response.data.savedData;
-
-        // Handle the saved data as needed
-        console.log("Saved Data:", savedData);
 
         setShowForm(false);
         setShowSelfieCapture(true);
@@ -119,18 +115,89 @@ const Posts = () => {
     form.append("image", blob, "selfie." + fileType.split("/")[1]);
 
     try {
-      // Upload the image and set showCard to true when the upload is successful
       await uploadImage(form);
-      setShowCard(true); // Show the card
       setImageUrls(prevUrls => [imageData, ...prevUrls]);
       setLastSubmittedImage(imageData);
       setError("");
+      setShowSignature(true);
     } catch (error) {
       setError("Error uploading image. Please try again.");
     }
   };
 
   const cardRef = useRef(null);
+  const signatureRef = useRef(null);
+
+  const handleAgreeAndPrint = async () => {
+    let signatureImage;
+
+    if (useTypedName) {
+      // Get the typed name from the Input field
+      const typedName = signatureRef.current.input.value;
+      signatureImage = typedName;
+    } else {
+      // Make sure the signatureCanvas reference is not null
+      if (!signatureRef.current) {
+        console.error("SignatureCanvas reference is null.");
+        return;
+      }
+      // Convert the drawn signature to an image data URL
+      signatureImage = signatureRef.current.getTrimmedCanvas().toDataURL();
+    }
+
+    setShowSignature(false);
+    setShowCard(true);
+    setImageUrls(prevUrls => [lastSubmittedImage, ...prevUrls]);
+    setLastSubmittedImage(lastSubmittedImage);
+    setError("");
+
+    // Upload the signature (typed name or drawn signature) to AWS S3 (you'll need to configure this part)
+    try {
+      const response = await uploadSignatureToS3(signatureImage);
+      // Handle the S3 response as needed
+      console.log("Signature uploaded to S3:", response);
+    } catch (error) {
+      setError("Error uploading signature. Please try again.");
+      console.error("Error uploading signature:", error);
+    }
+  };
+
+  const handleCancelSignature = () => {
+    setShowSignature(false);
+  };
+
+  // This is a placeholder function. You should replace it with your actual S3 upload code.
+  const uploadSignatureToS3 = async signatureImage => {
+    try {
+      // Your code to upload the signatureImage to AWS S3 goes here.
+      // You may use a library like AWS SDK or axios to upload the image to S3.
+
+      // Example using AWS SDK (make sure to configure AWS SDK):
+      // const AWS = require('aws-sdk');
+      // const s3 = new AWS.S3();
+      // const params = {
+      //   Bucket: 'your-s3-bucket-name',
+      //   Key: 'signature.jpg', // Change the filename as needed
+      //   Body: Buffer.from(signatureImage.replace(/^data:image\/\w+;base64,/, ''), 'base64'),
+      //   ContentType: 'image/jpeg', // Change the content type as needed
+      // };
+      // const result = await s3.upload(params).promise();
+
+      // Example using axios (you might need to configure axios properly):
+      // const response = await axios.post('your-s3-upload-url', {
+      //   image: signatureImage,
+      // });
+
+      // Return the response or result based on your S3 upload implementation.
+      return {
+        success: true,
+        message: "Signature uploaded to S3 successfully",
+      };
+    } catch (error) {
+      console.error("Error uploading signature to S3:", error);
+      throw error;
+    }
+  };
 
   return (
     <Row gutter={16} align="middle">
@@ -241,8 +308,8 @@ const Posts = () => {
                       style={{
                         display: "flex",
                         alignItems: "center",
-                        justifyContent: "center", // Center the NGF Logo horizontally
-                        marginTop: "1rem", // Add some margin between the QRCode and the logo
+                        justifyContent: "center",
+                        marginTop: "1rem",
                       }}
                     >
                       <img
@@ -271,6 +338,15 @@ const Posts = () => {
         )}
       </Col>
       <Col xs={24}></Col>
+      <AgreementSignature
+        showSignature={showSignature}
+        handleCancelSignature={handleCancelSignature}
+        handleAgreeAndPrint={handleAgreeAndPrint}
+        setUseTypedName={setUseTypedName}
+        useTypedName={useTypedName}
+        signatureRef={signatureRef}
+        error={error}
+      />
     </Row>
   );
 };

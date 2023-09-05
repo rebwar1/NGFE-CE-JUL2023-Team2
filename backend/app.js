@@ -114,6 +114,29 @@ app.get("/save-check-in", (req, res) => {
   });
 });
 
+app.get("/api/flag", (req, res) => {
+  const query = "SELECT name_common, flag_url, language FROM country_data";
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Database query error: " + err.stack);
+      res.status(500).send("Database query error");
+      return;
+    }
+    res.json(results);
+  });
+});
+
+app.get("/safety/card", (req, res) => {
+  db.query("SELECT * FROM construction_safety", (err, results) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: "An error occurred while fetching data." });
+    } else {
+      res.json(results);
+    }
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });

@@ -1,6 +1,6 @@
 import React from "react";
 import { ChakraProvider, Box } from "@chakra-ui/react";
-import RegisteredUserQRCode from "./RegisteredUserQRCode";
+import RegisteredUserQRCode from "./regester/RegisteredUserQRCode";
 import "../../assets/scss/dashboard.scss";
 
 export default function DashboardSignup() {
