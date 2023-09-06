@@ -1,0 +1,7 @@
+{
+  "ext": "js,mjs,json",
+  "script-ext": "js,mjs",
+  "execMap": {
+    "js": "node --experimental-specifier-resolution=node --experimental-modules"
+  }
+}
