@@ -185,6 +185,8 @@ import React, { useState, useEffect } from "react";
 import { Card, Button, Spin, Select } from "antd";
 import { axiosClientWithoutHeader } from "../../../../config/axios";
 import AWS from "../../textTranslationPolly/Credentials";
+import { AudioOutlined, StepForwardOutlined } from "@ant-design/icons";
+import "./SafetyCards.css";
 
 const { Option } = Select;
 
@@ -263,11 +265,6 @@ const DisplaySafetyCard = ({ displyPrint, setShowSafetyCardMessage }) => {
       const response = await translate.translateText(params).promise();
       let translatedDescription = response.TranslatedText;
 
-      // translatedDescription = translatedDescription.replace(
-      //   /Concept «|panneau | » | Please Stop smoking | ( |), «/g,
-      //   ""
-      // );
-
       translatedDescription = translatedDescription.replace(
         /Concept «|panneau | » | Please Stop smoking » \(« , «/g,
         ""
@@ -325,16 +322,15 @@ const DisplaySafetyCard = ({ displyPrint, setShowSafetyCardMessage }) => {
 
     setLoading(false);
   };
-
   return (
-    <div>
+    <div className="container">
       {cards.length > 0 && (
         <Card
-          style={{ width: 300 }}
+          style={{ width: 400, marginBottom: "0.5rem" }}
           cover={<img alt="Card" src={cards[currentCardIndex].image_url} />}
         >
           <p>{cards[currentCardIndex].description}</p>
-          {!languageSelected && ( // Conditional rendering for language selection
+          {!languageSelected && (
             <>
               <Select
                 style={{ width: 120 }}
@@ -346,35 +342,45 @@ const DisplaySafetyCard = ({ displyPrint, setShowSafetyCardMessage }) => {
                 <Option value="de">German</Option>
                 <Option value="fa">Persian</Option>
                 <Option value="ko">Korean</Option>
-                {/* Add more language options as needed */}
               </Select>
               <Button onClick={handleTranslate} disabled={loading}>
                 Translate
               </Button>
             </>
           )}
-          {languageSelected && ( // Conditional rendering for translation-related elements
+          {languageSelected && (
             <>
-              <Button
-                onClick={handleSpeechSynthesis}
-                disabled={!translatedText || loading}
-              >
-                Hear it
-              </Button>
-              {loading && <Spin className="loading-spinner" />}
+              <div className="icon-container">
+                {" "}
+                {/* Wrapping icons in a div */}
+                <Button
+                  className="icon-button audio-button"
+                  onClick={handleSpeechSynthesis}
+                  disabled={!translatedText || loading}
+                >
+                  <div className="center-icon">
+                    <AudioOutlined />
+                  </div>
+                </Button>
+                <div>{loading && <Spin className="loading-spinner" />}</div>
+              </div>
             </>
           )}
           {translatedText && (
             <div className="translated-text" style={{ color: "black" }}>
-              <p>{translatedText}</p>
+              <h5 className="text-h5">{translatedText}</h5>
             </div>
           )}
         </Card>
       )}
       {!showAllCards && (
-        <Button onClick={nextCard} style={{ marginTop: 16 }}>
-          Next Card
-        </Button>
+        <div className="center-button">
+          <Button onClick={nextCard} className="icon-button">
+            <div className="center-icon">
+              <StepForwardOutlined />
+            </div>
+          </Button>
+        </div>
       )}
       {showAllCards && <p>All cards have been displayed</p>}
     </div>

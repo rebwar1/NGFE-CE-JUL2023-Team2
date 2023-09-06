@@ -1,6 +1,4 @@
-/* SafetyCards.css */
-
-.safety-cards-container {
+/* .safety-cards-container {
   background-color: #f0f0f0;
   padding: 20px;
 }
@@ -20,10 +18,70 @@
 }
 
 .translated-text {
-  margin-top: 10px;
+  margin-top: 20px;
   font-style: italic;
 }
 
 .loading-spinner {
   margin-top: 10px;
+}
+
+/************************* */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.center-button {
+  margin-top: 1rem; /* Adjust the margin as needed */
+}
+
+/* Center icons within their containers */
+.icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Style for the loading spinner */
+.loading-spinner {
+  margin-left: 8px; /* Add some spacing between the icon and spinner */
+}
+
+/* Style for the translated text */
+.translated-text {
+  color: black;
+}
+
+/* Style for the red text within translated text */
+.translated-text h5 {
+  color: red;
+}
+.icon-button {
+  width: 7rem;
+  margin: 0.5rem;
+}
+.audio-button {
+  margin-bottom: 0;
+}
+*/ .translated-text {
+  color: black;
+}
+
+.translated-text h5 {
+  color: red;
+}
+
+.audio-button {
+  margin-bottom: 0;
+}
+.center-icon {
+  font-size: 1rem;
+}
+.text-h5 {
+  font-size: 1rem;
+  margin-top: 1rem;
 }
