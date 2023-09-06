@@ -1252,7 +1252,7 @@ import useQuery from "../../../hooks/useQuery";
 import { Card } from "antd";
 import { PrinterOutlined } from "@ant-design/icons";
 import ReactToPrint from "react-to-print";
-import DisplaySafetyCard from "../../healthSafety/Boards";
+import DisplaySafetyCard from "./safetyCard/DisplaySafetyCard"; // Import the DisplaySafetyCard component
 
 import "../../../App.css";
 
@@ -1418,7 +1418,7 @@ const Posts = () => {
         )}
         {showSelfieCapture && !showCard && (
           <>
-            <p className="normal-text margin-text">Take a selfie</p>
+            <p className="normal-text margin-text">Visitor Photo</p>
             <Webcam
               audio={false}
               ref={webcamRef}

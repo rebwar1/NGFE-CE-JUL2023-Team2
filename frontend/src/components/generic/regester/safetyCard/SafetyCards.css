@@ -1,0 +1,29 @@
+/* SafetyCards.css */
+
+.safety-cards-container {
+  background-color: #f0f0f0;
+  padding: 20px;
+}
+
+.language-select select {
+  width: 100px;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.card {
+  margin-bottom: 20px;
+}
+
+.translated-text {
+  margin-top: 10px;
+  font-style: italic;
+}
+
+.loading-spinner {
+  margin-top: 10px;
+}
