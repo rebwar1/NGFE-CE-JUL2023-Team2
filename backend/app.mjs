@@ -3,7 +3,7 @@ import express, { json } from "express";
 import mysql from "mysql2";
 import cors from "cors";
 import multer, { memoryStorage } from "multer";
-import { getUserPresignedUrls, uploadToS3 } from "./s3.js";
+import { getUserPresignedUrls, uploadToS3 } from "./s3.mjs";
 
 const app = express();
 
