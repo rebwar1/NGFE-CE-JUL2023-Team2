@@ -2,7 +2,9 @@ CREATE DATABASE DriverCheckInDB;
 <!-- ? -- Create the 'NGF' user and grant privileges on 'DriverCheckInDB' -->
 
 CREATE USER 'NGF'@'%' IDENTIFIED BY '123';
-GRANT ALL PRIVILEGES ON DriverCheckInDB.\* TO 'NGF'@'%';
+-- GRANT ALL PRIVILEGES ON DriverCheckInDB.\* TO 'NGF'@'%';
+GRANT ALL PRIVILEGES ON DriverCheckInDB.* TO 'NGF'@'%';
+
 FLUSH PRIVILEGES;
 
 <!-- ? -- Switch to the 'DriverCheckInDB' database -->
@@ -68,6 +70,15 @@ INSERT INTO construction_safety (image_url, description)
 VALUES ('https://previews.123rf.com/images/nastenkapeka/nastenkapeka1610/nastenkapeka161000036/65153418-yellow-warning-caution-sign-slippery-floor-is-tile.jpg', 'Yellow warning caution sign slippery floor is tile');
 
 
+
+-- ! 4rd table for construction_safety  list
+CREATE TABLE Images (
+  image_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  image_key VARCHAR(255) NOT NULL,
+  upload_timestamp TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES CheckIns(id)
+);
 
 
 
