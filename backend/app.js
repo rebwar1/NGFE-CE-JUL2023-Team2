@@ -1,26 +1,27 @@
 import "dotenv/config";
 import express, { json } from "express";
-import mysql from "mysql2";
+// import mysql from "mysql2";
 import cors from "cors";
 import multer, { memoryStorage } from "multer";
-import { getUserPresignedUrls, uploadToS3 } from "./s3.mjs";
-
+import { getUserPresignedUrls, uploadToS3 } from "./s3.js";
+import db from "./db.js";
 const app = express();
 
-const db = mysql.createConnection({
-  host: "localhost",
-  user: "NGF", // Make sure this matches the username you created in MySQL
-  password: "123", // Make sure this matches the password you set for the user
-  database: "DriverCheckInDB",
-});
+// const db = mysql.createConnection({
+//   host: "localhost",
+//   user: "NGF", // Make sure this matches the username you created in MySQL
+//   password: "123", // Make sure this matches the password you set for the user
+//   database: "DriverCheckInDB",
+// });
 
-db.connect(err => {
-  if (err) {
-    console.error("Error connecting to MySQL:", err);
-    return;
-  }
-  console.log("Connected to MySQL");
-});
+// db.connect(err => {
+//   if (err) {
+//     console.error("Error connecting to MySQL:", err);
+//     return;
+//   }
+//   console.log("Connected to MySQL");
+// });
+// export { app, db };
 
 const PORT = process.env.PORT || 4000;
 
@@ -136,6 +137,42 @@ app.get("/safety/card", (req, res) => {
     }
   });
 });
+
+// app.get("/check-ins-with-images", async (req, res) => {
+//   // Your SQL query to fetch form data and associated image keys
+//   const query = `
+//     SELECT CheckIns.*, Images.image_key
+//     FROM CheckIns
+//     LEFT JOIN Images ON CheckIns.id = Images.user_id
+//   `;
+
+//   db.query(query, (error, results) => {
+//     if (error) {
+//       console.error("Error querying the database:", error);
+//       return res.status(500).json({ message: "Internal server error" });
+//     }
+
+//     console.log(
+//       "Check-ins with associated images retrieved from the database:",
+//       results
+//     );
+
+//     // Process the results to handle null image_key values
+//     const processedResults = results.map(row => ({
+//       id: row.id,
+//       name: row.name,
+//       familyName: row.familyName,
+//       email: row.email,
+//       vehicleNumber: row.vehicleNumber,
+//       companyName: row.companyName,
+//       timestamp: row.timestamp,
+//       // Check if image_key is null or not and provide a default value if needed
+//       image_key: row.image_key || "default_image_key",
+//     }));
+
+//     return res.status(200).json(processedResults);
+//   });
+// });
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);

@@ -6,12 +6,25 @@ import {
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { v4 as uuid } from "uuid";
+import db from "./db.js"; // Import the db connection object
 
+// Rest of your s3.js code
 const s3 = new S3Client();
 const BUCKET = process.env.BUCKET;
 
 export const uploadToS3 = async ({ file, userId }) => {
   const key = `${userId}/${uuid()}`;
+  //!
+  const imageInsertQuery =
+    "INSERT INTO Images (user_id, image_key, upload_timestamp) VALUES (?, ?, ?)";
+  const imageInsertValues = [userId, key, new Date()];
+  db.query(imageInsertQuery, imageInsertValues, (error, result) => {
+    if (error) {
+      console.error("Error while inserting image record:", error);
+      // Handle the error
+    }
+    // Image record inserted successfully
+  });
   const command = new PutObjectCommand({
     Bucket: BUCKET,
     Key: key,
