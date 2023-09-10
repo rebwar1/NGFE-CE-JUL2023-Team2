@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { axiosClientWithoutHeader } from "../../config/axios";
 
 function JustPractice() {
   // Define state variables for form fields
@@ -27,13 +28,25 @@ function JustPractice() {
 
     // Send a POST request to your backend
     try {
-      const response = await fetch("http://localhost:4000/save-check-in", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      // const response = await fetch("http://localhost:4000/save-check-in", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(formData),
+      // });
+      const response = await axiosClientWithoutHeader.post(
+        "/save-check-in",
+        // Send the formData object as the request body
+        {
+          ...formData,
         },
-        body: JSON.stringify(formData),
-      });
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       // Display response in the console for debugging
       console.log("Response:", response);

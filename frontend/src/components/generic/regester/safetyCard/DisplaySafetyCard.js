@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Card, Button, Spin, Select } from "antd";
 import { axiosClientWithoutHeader } from "../../../../config/axios";
-// import AWS from "../../textTranslationPolly/Credentials";
-import { PollyClient, SynthesizeSpeechCommand } from "@aws-sdk/client-polly";
-import {
-  TranslateClient,
-  TranslateTextCommand,
-} from "@aws-sdk/client-translate";
+import AWS from "../../textTranslationPolly/Credentials";
+
+// import { PollyClient, SynthesizeSpeechCommand } from "@aws-sdk/client-polly";
+// import {
+//   TranslateClient,
+//   TranslateTextCommand,
+// } from "@aws-sdk/client-translate";
 
 import { AudioOutlined, StepForwardOutlined } from "@ant-design/icons";
 import "./SafetyCards.css";
@@ -73,38 +74,10 @@ const DisplaySafetyCard = ({ displyPrint, setShowSafetyCardMessage }) => {
     return newIndex;
   };
 
-  // const translateAndSetCardDescription = async description => {
-  //   setLoading(true);
-
-  //   const translate = new AWS.Translate();
-
-  //   const params = {
-  //     Text: description,
-  //     SourceLanguageCode: "auto",
-  //     TargetLanguageCode: targetLanguage,
-  //   };
-
-  //   try {
-  //     const response = await translate.translateText(params).promise();
-  //     let translatedDescription = response.TranslatedText;
-
-  //     translatedDescription = translatedDescription.replace(
-  //       /Concept «|panneau | » | Please Stop smoking » \(« , «/g,
-  //       ""
-  //     );
-
-  //     setTranslatedText(translatedDescription);
-  //   } catch (error) {
-  //     console.error("Error translating text:", error);
-  //   }
-
-  //   setLoading(false);
-  // };
-
   const translateAndSetCardDescription = async description => {
     setLoading(true);
 
-    const translateClient = new TranslateClient(); // Replace with your desired region
+    const translate = new AWS.Translate();
 
     const params = {
       Text: description,
@@ -113,9 +86,7 @@ const DisplaySafetyCard = ({ displyPrint, setShowSafetyCardMessage }) => {
     };
 
     try {
-      const command = new TranslateTextCommand(params);
-      const response = await translateClient.send(command);
-
+      const response = await translate.translateText(params).promise();
       let translatedDescription = response.TranslatedText;
 
       translatedDescription = translatedDescription.replace(
@@ -130,6 +101,36 @@ const DisplaySafetyCard = ({ displyPrint, setShowSafetyCardMessage }) => {
 
     setLoading(false);
   };
+
+  // const translateAndSetCardDescription = async description => {
+  //   setLoading(true);
+
+  //   const translateClient = new TranslateClient(); // Replace with your desired region
+
+  //   const params = {
+  //     Text: description,
+  //     SourceLanguageCode: "auto",
+  //     TargetLanguageCode: targetLanguage,
+  //   };
+
+  //   try {
+  //     const command = new TranslateTextCommand(params);
+  //     const response = await translateClient.send(command);
+
+  //     let translatedDescription = response.TranslatedText;
+
+  //     translatedDescription = translatedDescription.replace(
+  //       /Concept «|panneau | » | Please Stop smoking » \(« , «/g,
+  //       ""
+  //     );
+
+  //     setTranslatedText(translatedDescription);
+  //   } catch (error) {
+  //     console.error("Error translating text:", error);
+  //   }
+
+  //   setLoading(false);
+  // };
 
   const handleTranslate = async () => {
     if (!cards[currentCardIndex].description) {
@@ -146,35 +147,6 @@ const DisplaySafetyCard = ({ displyPrint, setShowSafetyCardMessage }) => {
     setLanguageSelected(true);
   };
 
-  // const handleSpeechSynthesis = async () => {
-  //   if (!translatedText && !loading) {
-  //     return;
-  //   }
-
-  //   setLoading(true);
-
-  //   const polly = new AWS.Polly();
-
-  //   const params = {
-  //     Text: translatedText,
-  //     OutputFormat: "mp3",
-  //     VoiceId: getVoiceId(targetLanguage), // Use getVoiceId to select the voice.
-  //   };
-
-  //   try {
-  //     const response = await polly.synthesizeSpeech(params).promise();
-
-  //     const audioSrc = URL.createObjectURL(
-  //       new Blob([response.AudioStream], { type: "audio/mpeg" })
-  //     );
-  //     const audio = new Audio(audioSrc);
-  //     audio.play();
-  //   } catch (error) {
-  //     console.error("Error synthesizing speech:", error);
-  //   }
-
-  //   setLoading(false);
-  // };
   const handleSpeechSynthesis = async () => {
     if (!translatedText && !loading) {
       return;
@@ -182,7 +154,7 @@ const DisplaySafetyCard = ({ displyPrint, setShowSafetyCardMessage }) => {
 
     setLoading(true);
 
-    const pollyClient = new PollyClient(); // Replace with your desired region
+    const polly = new AWS.Polly();
 
     const params = {
       Text: translatedText,
@@ -191,8 +163,7 @@ const DisplaySafetyCard = ({ displyPrint, setShowSafetyCardMessage }) => {
     };
 
     try {
-      const command = new SynthesizeSpeechCommand(params);
-      const response = await pollyClient.send(command);
+      const response = await polly.synthesizeSpeech(params).promise();
 
       const audioSrc = URL.createObjectURL(
         new Blob([response.AudioStream], { type: "audio/mpeg" })
@@ -205,6 +176,36 @@ const DisplaySafetyCard = ({ displyPrint, setShowSafetyCardMessage }) => {
 
     setLoading(false);
   };
+  // const handleSpeechSynthesis = async () => {
+  //   if (!translatedText && !loading) {
+  //     return;
+  //   }
+
+  //   setLoading(true);
+
+  //   const pollyClient = new PollyClient(); // Replace with your desired region
+
+  //   const params = {
+  //     Text: translatedText,
+  //     OutputFormat: "mp3",
+  //     VoiceId: getVoiceId(targetLanguage), // Use getVoiceId to select the voice.
+  //   };
+
+  //   try {
+  //     const command = new SynthesizeSpeechCommand(params);
+  //     const response = await pollyClient.send(command);
+
+  //     const audioSrc = URL.createObjectURL(
+  //       new Blob([response.AudioStream], { type: "audio/mpeg" })
+  //     );
+  //     const audio = new Audio(audioSrc);
+  //     audio.play();
+  //   } catch (error) {
+  //     console.error("Error synthesizing speech:", error);
+  //   }
+
+  //   setLoading(false);
+  // };
 
   return (
     <div className="container">
@@ -272,3 +273,4 @@ const DisplaySafetyCard = ({ displyPrint, setShowSafetyCardMessage }) => {
 };
 
 export default DisplaySafetyCard;
+//✅✅✅✅✅✅✅✅

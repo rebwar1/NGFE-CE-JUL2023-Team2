@@ -13,7 +13,7 @@ USE DriverCheckInDB;
 
 -- Create the table with required columns
 CREATE TABLE CheckIns (
-id INT AUTO_INCREMENT PRIMARY KEY,
+userId INT AUTO_INCREMENT PRIMARY KEY,
 name VARCHAR(255) NOT NULL,
 familyName VARCHAR(255) NOT NULL,
 email VARCHAR(255) NOT NULL,
@@ -77,8 +77,9 @@ CREATE TABLE Images (
   user_id INT NOT NULL,
   image_key VARCHAR(255) NOT NULL,
   upload_timestamp TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES CheckIns(id)
+  FOREIGN KEY (user_id) REFERENCES CheckIns(userId)
 );
+
 
 
 
