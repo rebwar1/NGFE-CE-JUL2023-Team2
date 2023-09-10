@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { axiosClientWithoutHeader } from "../../../../config/axios";
 import axios from "axios";
 import { Button, Row } from "antd";
 import CountryCard from "./CountryCard";
@@ -11,7 +12,7 @@ function CountryCardList() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/api/flag");
+        const response = await axiosClientWithoutHeader.get("/api/flag");
         setCountries(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
