@@ -296,7 +296,7 @@ app.get("/save-check-in", (req, res) => {
 });
 
 app.get("/api/flag", (req, res) => {
-  const query = "SELECT name_common, flag_url, language FROM country_data";
+  const query = "SELECT * FROM country_data";
   db.query(query, (err, results) => {
     if (err) {
       console.error("Database query error: " + err.stack);

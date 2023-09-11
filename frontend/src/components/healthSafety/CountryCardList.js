@@ -5,7 +5,7 @@ import { Card, List, Input } from "antd";
 const { Meta } = Card;
 const { Search } = Input;
 
-function CountryCardList() {
+function CountryCardList({ onCardClick }) {
   const [countries, setCountries] = useState([]);
   const [filteredCountries, setFilteredCountries] = useState([]);
   const [searchText, setSearchText] = useState("");
@@ -32,8 +32,12 @@ function CountryCardList() {
     setFilteredCountries(filtered);
   };
 
+  const handleCardClick = country => {
+    onCardClick(country);
+  };
+
   return (
-    <div>
+    <div style={{ textAlign: "center" }}>
       <Search
         placeholder="Search by name or language"
         allowClear
@@ -44,19 +48,19 @@ function CountryCardList() {
       <List
         grid={{
           gutter: 16,
-          column: 5,
+          column: 3,
         }}
         dataSource={filteredCountries}
         renderItem={country => (
-          <List.Item>
+          <List.Item onClick={() => handleCardClick(country)}>
             <Card
               hoverable
-              style={{ cursor: "pointer", width: "200px" }}
+              style={{ cursor: "pointer", width: "150px" }}
               cover={
                 <img
                   alt={country.name}
                   src={country.flag_url}
-                  style={{ height: "100px", objectFit: "cover" }}
+                  style={{ height: "75px", objectFit: "cover" }}
                 />
               }
             >

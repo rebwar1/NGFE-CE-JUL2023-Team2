@@ -1,47 +1,87 @@
 import React, { useState, useEffect } from "react";
 import { Card, Button, Spin, Select } from "antd";
-import { axiosClientWithoutHeader } from "../../../../config/axios";
-import AWS from "../../textTranslationPolly/Credentials";
-
+import { axiosClientWithoutHeader } from "../../config/axios";
+import AWS from "../generic/textTranslationPolly/Credentials";
 import { AudioOutlined, StepForwardOutlined } from "@ant-design/icons";
 import "./SafetyCards.css";
 
 const { Option } = Select;
 
-const DisplaySafetyCard = ({ displyPrint, setShowSafetyCardMessage }) => {
+const DisplaySafetyCard = ({
+  selectedCountry,
+  displayPrint,
+  setShowSafetyCardMessage,
+}) => {
   const [cards, setCards] = useState([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [displayedCards, setDisplayedCards] = useState([]);
   const [showAllCards, setShowAllCards] = useState(false);
-  const [targetLanguage, setTargetLanguage] = useState("es"); // Default language
   const [translatedText, setTranslatedText] = useState("");
   const [loading, setLoading] = useState(false);
-  const [languageSelected, setLanguageSelected] = useState(false); // New state variable
+  const [languageSelected, setLanguageSelected] = useState(false);
 
-  const getVoiceId = languageCode => {
-    switch (languageCode) {
+  const [voice, setVoice] = useState("");
+  const [tld, setTld] = useState(null);
+  const [selectLanguage, setSelectLanguage] = useState("");
+  const [targetLanguage, setTargetLanguage] = useState(tld);
+  const [country, setCountry] = useState(null);
+
+  const languageNameToCode = {
+    Spanish: "es",
+    French: "fr",
+    German: "de",
+    Persian: "fa",
+    Korean: "ko",
+    English: "en",
+    Arabic: "ar",
+    Kurdish: "ku",
+    // Add more languages as needed
+  };
+
+  const getVoiceId = () => {
+    let selectedVoice = "Celine"; // Default voice
+
+    switch (tld) {
       case "es":
-        return "Lucia"; // Spanish voice
+        selectedVoice = "Lucia"; // Spanish voice
+        break;
       case "fr":
-        return "Celine"; // French voice
+        selectedVoice = "Celine"; // French voice
+        break;
       case "de":
-        return "Marlene"; // German voice
-      // Add more cases as needed for other languages
+        selectedVoice = "Marlene"; // German voice
+        break;
       case "fa":
-        return "Dari"; // Persian voice
+        selectedVoice = "Dari"; // Persian voice
+        break;
       case "ko":
-        return "Seoyeon, Female"; // Kurdish voice
+        selectedVoice = "Seoyeon"; // Korean voice
+        break;
+      case "en":
+        selectedVoice = "Emma"; // English voice
+        break;
+      case "ar":
+        selectedVoice = "Hala"; // Arabic voice
+        break;
+      case "ku":
+        selectedVoice = "Zayd"; // Kurdish voice
+        break;
       default:
-        return "Joanna"; // Default voice
+        break;
     }
+
+    // Set the target language based on the selected TLD
+    setTargetLanguage(tld);
+    setVoice(selectedVoice);
+
+    return selectedVoice;
   };
 
   useEffect(() => {
-    // Fetch card data from the Express API using Axios
     axiosClientWithoutHeader
       .get("/safety/card")
       .then(response => {
-        console.log("API Response:", response.data); // Debugging: Log the API response
+        console.log("API Response:", response.data);
         setCards(response.data);
       })
       .catch(error => console.error(error));
@@ -49,14 +89,20 @@ const DisplaySafetyCard = ({ displyPrint, setShowSafetyCardMessage }) => {
 
   const nextCard = async () => {
     if (displayedCards.length === cards.length - 1) {
-      // All cards have been displayed
       setShowAllCards(true);
       setShowSafetyCardMessage(true);
     } else {
       const newIndex = findNextCardIndex();
       setDisplayedCards([...displayedCards, newIndex]);
       setCurrentCardIndex(newIndex);
-      await translateAndSetCardDescription(cards[newIndex].description);
+
+      // Get the target language code from the selected language name
+      const targetLanguageCode = languageNameToCode[selectLanguage];
+
+      await translateAndSetCardDescription(
+        cards[newIndex].description,
+        targetLanguageCode
+      );
     }
   };
 
@@ -68,31 +114,28 @@ const DisplaySafetyCard = ({ displyPrint, setShowSafetyCardMessage }) => {
     return newIndex;
   };
 
-  const translateAndSetCardDescription = async description => {
+  const translateAndSetCardDescription = async (
+    description,
+    targetLanguageCode
+  ) => {
     setLoading(true);
-
     const translate = new AWS.Translate();
-
     const params = {
       Text: description,
       SourceLanguageCode: "auto",
-      TargetLanguageCode: targetLanguage,
+      TargetLanguageCode: targetLanguageCode,
     };
-
     try {
       const response = await translate.translateText(params).promise();
       let translatedDescription = response.TranslatedText;
-
       translatedDescription = translatedDescription.replace(
         /Concept «|panneau | » | Please Stop smoking » \(« , «/g,
         ""
       );
-
       setTranslatedText(translatedDescription);
     } catch (error) {
       console.error("Error translating text:", error);
     }
-
     setLoading(false);
   };
 
@@ -100,35 +143,33 @@ const DisplaySafetyCard = ({ displyPrint, setShowSafetyCardMessage }) => {
     if (!cards[currentCardIndex].description) {
       return;
     }
-
     setLoading(true);
 
-    await translateAndSetCardDescription(cards[currentCardIndex].description);
+    // Convert the selected language name to language code
+    const targetLanguageCode = languageNameToCode[selectLanguage];
 
+    await translateAndSetCardDescription(
+      cards[currentCardIndex].description,
+      targetLanguageCode
+    );
     setLoading(false);
-
-    // Set languageSelected to true after translation
     setLanguageSelected(true);
   };
 
   const handleSpeechSynthesis = async () => {
+    const targetLanguageCode = languageNameToCode[selectLanguage];
     if (!translatedText && !loading) {
       return;
     }
-
     setLoading(true);
-
     const polly = new AWS.Polly();
-
     const params = {
       Text: translatedText,
       OutputFormat: "mp3",
-      VoiceId: getVoiceId(targetLanguage), // Use getVoiceId to select the voice.
+      VoiceId: getVoiceId(targetLanguage),
     };
-
     try {
       const response = await polly.synthesizeSpeech(params).promise();
-
       const audioSrc = URL.createObjectURL(
         new Blob([response.AudioStream], { type: "audio/mpeg" })
       );
@@ -137,9 +178,19 @@ const DisplaySafetyCard = ({ displyPrint, setShowSafetyCardMessage }) => {
     } catch (error) {
       console.error("Error synthesizing speech:", error);
     }
-
     setLoading(false);
   };
+
+  useEffect(() => {
+    if (selectedCountry) {
+      console.log("Selected Country:", selectedCountry);
+      setTld(selectedCountry.tld);
+      setSelectLanguage(selectedCountry.language);
+      setVoice(selectedCountry.voice);
+      setCountry(selectedCountry.flag_url);
+      // You can access selectedCountry data here and use it as needed.
+    }
+  }, [selectedCountry]);
 
   return (
     <div className="container">
@@ -151,17 +202,6 @@ const DisplaySafetyCard = ({ displyPrint, setShowSafetyCardMessage }) => {
           <p>{cards[currentCardIndex].description}</p>
           {!languageSelected && (
             <>
-              <Select
-                style={{ width: 120 }}
-                value={targetLanguage}
-                onChange={value => setTargetLanguage(value)}
-              >
-                <Option value="es">Spanish</Option>
-                <Option value="fr">French</Option>
-                <Option value="de">German</Option>
-                <Option value="fa">Persian</Option>
-                <Option value="ko">Korean</Option>
-              </Select>
               <Button onClick={handleTranslate} disabled={loading}>
                 Translate
               </Button>
@@ -170,8 +210,6 @@ const DisplaySafetyCard = ({ displyPrint, setShowSafetyCardMessage }) => {
           {languageSelected && (
             <>
               <div className="icon-container">
-                {" "}
-                {/* Wrapping icons in a div */}
                 <Button
                   className="icon-button audio-button"
                   onClick={handleSpeechSynthesis}
@@ -190,6 +228,9 @@ const DisplaySafetyCard = ({ displyPrint, setShowSafetyCardMessage }) => {
               <h5 className="text-h5">{translatedText}</h5>
             </div>
           )}
+          <div className="flag-container">
+            <img src={country} alt="German Flag" className="flag-image" />
+          </div>
         </Card>
       )}
       {!showAllCards && (
@@ -207,4 +248,5 @@ const DisplaySafetyCard = ({ displyPrint, setShowSafetyCardMessage }) => {
 };
 
 export default DisplaySafetyCard;
-//✅✅✅✅✅✅✅✅
+
+//🍇

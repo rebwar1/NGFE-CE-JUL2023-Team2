@@ -29,7 +29,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Docusign Signature</title>
+    <title>NGFE(EHS) Signature</title>
     <!-- Link to Bootstrap CSS -->
     <link
       rel="stylesheet"
@@ -39,6 +39,7 @@
       /* Add custom styles here */
       body {
         background-color: #f4f4f4;
+        margin-top: 5rem;
       }
       .container {
         max-width: 400px;
@@ -61,11 +62,21 @@
       .btn-primary:hover {
         background-color: #0056b3;
       }
+      .img-fluid {
+        width: 150px;
+        margin: 0 auto 10px auto;
+        display: block;
+      }
     </style>
   </head>
   <body>
     <div class="container">
-      <h2 class="text-center">Docusign Signature</h2>
+      <img
+        src="https://ngfimg.s3.eu-west-2.amazonaws.com/NGF-logo.jpg"
+        alt="NGF Logo"
+        class="img-fluid"
+      />
+      <h3 class="text-center">NGF(EHS) Signature</h3>
       <form action="/form" method="post">
         <div class="form-group">
           <label for="name" class="form-label">Name:</label>

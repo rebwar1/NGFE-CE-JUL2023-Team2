@@ -32,24 +32,41 @@ VALUES ('Team2', 'Ngfe', 'team2@gmail.com', 'M54J7689', 'traveling co', '2023-09
 
 CREATE TABLE country_data (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name_common VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
     flag_url VARCHAR(255) NOT NULL,
-    language VARCHAR(255) NOT NULL
+    language VARCHAR(255) NOT NULL,
+    tld VARCHAR(255) NOT NULL,
+    voice VARCHAR(255) NOT NULL
 );
-INSERT INTO country_data (name_common, flag_url, language)
-VALUES ('United Kingdom', 'https://flagcdn.com/w320/gb.png', 'English');
 
-INSERT INTO country_data (name_common, flag_url, language)
-VALUES ('South Korea', 'https://flagcdn.com/w320/kr.png', 'Korean');
 
-INSERT INTO country_data (name_common, flag_url, language)
-VALUES ('France', 'https://flagcdn.com/w320/fr.png', 'French');
+INSERT INTO country_data (name, flag_url, language, tld, voice)
+VALUES ('United Kingdom', 'https://flagcdn.com/w320/gb.png', 'English, British', 'en', 'Emma');
 
-INSERT INTO country_data (name_common, flag_url, language)
-VALUES ('Spain', 'https://flagcdn.com/w320/es.png', 'Spanish');
+INSERT INTO country_data (name, flag_url, language, tld, voice)
+VALUES ('South Korea', 'https://flagcdn.com/w320/kr.png', 'Korean', 'ko', 'Seoyeon');
 
-INSERT INTO country_data (name_common, flag_url, language)
-VALUES ('Germany', 'https://flagcdn.com/w320/de.png', 'German');
+INSERT INTO country_data (name, flag_url, language, tld, voice)
+VALUES ('France', 'https://flagcdn.com/w320/fr.png', 'French', 'fr', 'Celine');
+
+INSERT INTO country_data (name, flag_url, language, tld, voice)
+VALUES ('Spain', 'https://flagcdn.com/w320/es.png', 'Spanish', 'es', 'Lucia');
+
+INSERT INTO country_data (name, flag_url, language, tld, voice)
+VALUES ('Germany', 'https://flagcdn.com/w320/de.png', 'German', 'de', 'Marlene');
+
+INSERT INTO country_data (name, flag_url, language, tld, voice)
+VALUES ('Egypt', 'https://flagcdn.com/w320/eg.png', 'Arabic, Gulf', 'ar', 'Hala');
+
+INSERT INTO country_data (name, flag_url, language, tld, voice)
+VALUES ('Kurdistan', 'https://upload.wikimedia.org/wikipedia/commons/1/17/Flag_of_Kurdistan_%28Khoiboun%29.png', 'Kurdish', 'ku', 'Zayd');
+
+
+
+
+
+
+
 
 
 
@@ -60,6 +77,32 @@ CREATE TABLE construction_safety (
     image_url VARCHAR(255) NOT NULL,
     description TEXT
 );
+
+INSERT INTO construction_safety (image_url, description)
+VALUES ('https://ngfimg.s3.eu-west-2.amazonaws.com/EHS/01.png', 'Ensure you follow distancing/hygiene regulations');
+INSERT INTO construction_safety (image_url, description)
+VALUES ('https://ngfimg.s3.eu-west-2.amazonaws.com/EHS/02.png', 'Always wear correct PPE');
+INSERT INTO construction_safety (image_url, description)
+VALUES ('https://ngfimg.s3.eu-west-2.amazonaws.com/EHS/03.png', 'Please remain in your cab until instructed otherwise');
+INSERT INTO construction_safety (image_url, description)
+VALUES ('https://ngfimg.s3.eu-west-2.amazonaws.com/EHS/04.png', 'Drivers must Not enter the vehicle bed from the side');
+INSERT INTO construction_safety (image_url, description)
+VALUES ('https://ngfimg.s3.eu-west-2.amazonaws.com/EHS/05.png', 'Drivers must stand clear of the vehicle while FLT is in operation');
+INSERT INTO construction_safety (image_url, description)
+VALUES ('https://ngfimg.s3.eu-west-2.amazonaws.com/EHS/06.png', 'Use correct manual handling techniques when using on trailers');
+INSERT INTO construction_safety (image_url, description)
+VALUES ('https://ngfimg.s3.eu-west-2.amazonaws.com/EHS/07.png', 'Smoking is only permitted in the designated area');
+INSERT INTO construction_safety (image_url, description)
+INSERT INTO construction_safety (image_url, description)
+INSERT INTO construction_safety (image_url, description)
+VALUES ('https://ngfimg.s3.eu-west-2.amazonaws.com/EHS/08.png',
+        'Stop and think for 30 seconds,\nHow can I be Injured?\nWhen could it Happen?\nWhat’s the Worst injury that could result?\nHow do I Prevent the accident?\nThink WHAT IF ……?\nThink Not IF ONLY …..');
+INSERT INTO construction_safety (image_url, description)
+VALUES ('https://ngfimg.s3.eu-west-2.amazonaws.com/EHS/safety.gif', 'Site safety board');
+
+
+
+
 INSERT INTO construction_safety (image_url, description)
 VALUES ('https://previews.123rf.com/images/chatchai8989/chatchai89891707/chatchai8989170700039/81440712-standard-construction-safety-equipment-on-wood-background.jpg', 'Standard construction safety equipment on wood background');
 
@@ -97,3 +140,21 @@ DROP TABLE table_name;
 
 -- ! more readable
 SELECT * FROM CheckIns\G
+SHOW tables;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
