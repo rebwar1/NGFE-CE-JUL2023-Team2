@@ -13,4 +13,5 @@ import AWS from "aws-sdk";
 //     "votF1vjA4Chkf6f+5QSWXl3TU+JI4JksOEL98mvs"
 //   ),
 // });
+
 export default AWS;
