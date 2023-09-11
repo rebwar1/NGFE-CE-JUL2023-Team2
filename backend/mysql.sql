@@ -97,3 +97,7 @@ DROP TABLE table_name;
 
 -- ! more readable
 SELECT * FROM CheckIns\G
+
+
+
+
