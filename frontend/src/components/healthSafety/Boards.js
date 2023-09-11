@@ -177,78 +177,34 @@
 // };
 
 // export default DisplaySafetyCard;
-
 //🍉
+
 import React, { useState } from "react";
-// import axios from "axios"; // You may need to install axios if not already installed
-import { axiosClientWithoutHeader } from "../../config/axios";
+import CountryCardList from "./CountryCardList";
+import DisplaySafetyCard from "./DisplaySafetyCard";
 
-const SignatureForm = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    company: "",
-  });
+function Boards({ displayPrint, setShowSafetyCardMessage }) {
+  const [showCountryCardList, setShowCountryCardList] = useState(true);
+  const [selectedCountry, setSelectedCountry] = useState(null);
 
-  const [signingUrl, setSigningUrl] = useState("");
-
-  const handleChange = e => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSubmit = async e => {
-    e.preventDefault();
-
-    try {
-      const response = await axiosClientWithoutHeader.post(
-        "/api/sign",
-        formData
-      );
-      const { signingUrl } = response.data;
-
-      // Redirect the user to the signing ceremony
-      window.location.href = signingUrl;
-    } catch (error) {
-      console.error("Error triggering signature:", error);
-    }
+  const handleCardClick = countryData => {
+    setSelectedCountry(countryData);
+    setShowCountryCardList(false);
   };
 
   return (
     <div>
-      <h2>Signature Form</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Name:</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Company:</label>
-          <input
-            type="text"
-            name="company"
-            value={formData.company}
-            onChange={handleChange}
-          />
-        </div>
-        <button type="submit">Sign Document</button>
-      </form>
+      {showCountryCardList ? (
+        <CountryCardList onCardClick={handleCardClick} />
+      ) : (
+        <DisplaySafetyCard
+          selectedCountry={selectedCountry}
+          displayPrint={displayPrint}
+          setShowSafetyCardMessage={setShowSafetyCardMessage}
+        />
+      )}
     </div>
   );
-};
+}
 
-export default SignatureForm;
+export default Boards;

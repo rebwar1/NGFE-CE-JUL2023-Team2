@@ -320,9 +320,7 @@ import { Card } from "antd";
 import { PrinterOutlined } from "@ant-design/icons";
 import ReactToPrint from "react-to-print";
 import DisplaySafetyCard from "./safetyCard/DisplaySafetyCard"; // Import the DisplaySafetyCard component
-
-import Signature from "./Signature"; // Import the Signature component
-
+import Boards from "../../healthSafety/Boards";
 import "../../../App.css";
 
 const validFileTypes = ["image/jpg", "image/jpeg", "image/png"];
@@ -453,8 +451,13 @@ const Posts = () => {
   };
 
   return (
-    <Row gutter={16} align="middle" style={{ width: "auto" }}>
-      <Col xs={24} md={12}>
+    <Row
+      gutter={16}
+      align="middle"
+      textAlign="center"
+      style={{ width: "100%", display: "inline-block" }}
+    >
+      <Col xs={24} md={12} style={{ width: "100%", display: "inline-block" }}>
         {showForm && (
           <>
             <p className="normal-text margin-text">Driver check-in</p>
@@ -511,8 +514,12 @@ const Posts = () => {
         )}
         {showSafetyCard && !showSafetyCardMessage && (
           <>
-            <DisplaySafetyCard
+            {/* <DisplaySafetyCard
               displayPrint={displayPrint} // Corrected prop name
+              setShowSafetyCardMessage={setShowSafetyCardMessage}
+            /> */}
+            <Boards
+              displayPrint={displayPrint}
               setShowSafetyCardMessage={setShowSafetyCardMessage}
             />
           </>
@@ -593,8 +600,8 @@ const Posts = () => {
                 )}
               </div>
             </Card>
-            <a href="https://demo.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=2a0e8bdf-ed64-4653-a96d-d636e553a289&env=demo&acct=5039d680-68b2-47e1-85de-af31e5b356cb&v=2">
-              NGFEE
+            <a href="https://demo.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=423da77f-891e-461b-92b3-6000ae3dd51b&env=demo&acct=5039d680-68b2-47e1-85de-af31e5b356cb&v=2">
+              NGF
             </a>
             <ReactToPrint
               trigger={() => (

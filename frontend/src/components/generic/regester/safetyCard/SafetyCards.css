@@ -85,3 +85,15 @@
   font-size: 1rem;
   margin-top: 1rem;
 }
+
+/* In your CSS file (e.g., SafetyCards.css) */
+.flag-container {
+  position: absolute;
+  top: 10.6rem;
+  right: 4.5rem;
+}
+
+.flag-image {
+  width: 50px; /* Adjust the width as needed */
+  height: auto; /* Maintain aspect ratio */
+}
