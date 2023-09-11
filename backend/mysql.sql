@@ -98,6 +98,6 @@ DROP TABLE table_name;
 -- ! more readable
 SELECT * FROM CheckIns\G
 
-
+git merge changenameS3
 
 
