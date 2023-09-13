@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
+import { axiosClientWithoutHeader } from "../../../../config/axios";
 import { Card, List, Input } from "antd";
 
 const { Meta } = Card;
@@ -11,8 +12,8 @@ function CountryCardList() {
   const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8000/api/flag")
+    axiosClientWithoutHeader
+      .get("/api/flag")
       .then(response => {
         setCountries(response.data);
         setFilteredCountries(response.data);
