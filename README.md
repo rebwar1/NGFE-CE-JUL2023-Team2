@@ -19,3 +19,17 @@
  
     The web app is a significant step toward improving health and safety compliance at NGF Europe. It promotes inclusivity and a culture of safety while providing a secure and efficient way for drivers to check in. Future enhancements, such as Amazon Rekognition for advanced driver behavior analysis, could further enhance safety measures.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
