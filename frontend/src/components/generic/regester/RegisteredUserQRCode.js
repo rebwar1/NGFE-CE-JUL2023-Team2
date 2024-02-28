@@ -588,7 +588,7 @@ const Posts = () => {
                       }}
                     >
                       <img
-                        src="https://ngfimg.s3.eu-west-2.amazonaws.com/NGF-logo.jpg"
+                        src="https://ngfimg.s3.eu-west-2.amazonaws.com/NGF-Europe-logo.jpg"
                         alt="NGF Logo"
                         style={{
                           width: "200px",

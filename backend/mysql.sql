@@ -140,3 +140,23 @@ DROP TABLE table_name;
 
 -- ! more readable
 SELECT * FROM CheckIns\G
+
+
+mysql -u <username> -p
+SHOW DATABASES;
+USE DriverCheckInDB;
+SHOW TABLES;
+SELECT * FROM CheckIns;
+SELECT * FROM CheckIns\G;
+mysql> pager less -SFX
+mysql> SELECT * FROM CheckIns;
+
+
+
+
+to donload all file in aws bucket
+aws s3 sync s3://ngfimg .
+
+to upload from local folder to aws bucket
+aws s3 sync . s3://ngfimg
+
