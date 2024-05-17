@@ -143,6 +143,8 @@ SELECT * FROM CheckIns\G
 
 
 mysql -u <username> -p
+mysql -u root -p
+
 SHOW DATABASES;
 USE DriverCheckInDB;
 SHOW TABLES;

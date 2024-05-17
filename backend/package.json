@@ -5,10 +5,11 @@
   "main": "app.js",
   "type": "module",
   "dependencies": {
-    "body-parser": "^1.20.1",
     "@aws-sdk/client-s3": "^3.188.0",
     "@aws-sdk/s3-request-presigner": "^3.190.0",
     "axios": "^1.5.0",
+    "body-parser": "^1.20.1",
+    "ci": "^2.3.0",
     "cors": "^2.8.5",
     "docusign-esign": "^6.4.0",
     "dotenv": "^16.0.3",
