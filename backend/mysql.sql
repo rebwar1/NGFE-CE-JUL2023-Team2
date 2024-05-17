@@ -95,8 +95,7 @@ VALUES ('https://ngfimg.s3.eu-west-2.amazonaws.com/EHS/07.png', 'Smoking is only
 INSERT INTO construction_safety (image_url, description)
 INSERT INTO construction_safety (image_url, description)
 INSERT INTO construction_safety (image_url, description)
-VALUES ('https://ngfimg.s3.eu-west-2.amazonaws.com/EHS/08.png',
-        'Stop and think for 30 seconds,\nHow can I be Injured?\nWhen could it Happen?\nWhat’s the Worst injury that could result?\nHow do I Prevent the accident?\nThink WHAT IF ……?\nThink Not IF ONLY …..');
+VALUES ('https://ngfimg.s3.eu-west-2.amazonaws.com/EHS/08.png','Stop and think for 30 seconds,\nHow can I be Injured?\nWhen could it Happen?\nWhat is the Worst injury that could result?\nHow do I Prevent the accident?\nThink WHAT IF ……?\nThink Not IF ONLY …..');
 INSERT INTO construction_safety (image_url, description)
 VALUES ('https://ngfimg.s3.eu-west-2.amazonaws.com/EHS/safety.gif', 'Site safety board');
 
@@ -140,3 +139,25 @@ DROP TABLE table_name;
 
 -- ! more readable
 SELECT * FROM CheckIns\G
+
+
+mysql -u <username> -p
+mysql -u root -p
+
+SHOW DATABASES;
+USE DriverCheckInDB;
+SHOW TABLES;
+SELECT * FROM CheckIns;
+SELECT * FROM CheckIns\G;
+mysql> pager less -SFX
+mysql> SELECT * FROM CheckIns;
+
+
+
+
+to donload all file in aws bucket
+aws s3 sync s3://ngfimg .
+
+to upload from local folder to aws bucket
+aws s3 sync . s3://ngfimg
+
